@@ -1,0 +1,26 @@
+from src.configurations.reading_env import env
+
+
+class DatabaseConfig:
+    def __init__(self):
+        self.__db_name = env("POSTGRES_DB")
+        self.__db_host = env("POSTGRES_HOST")
+        self.__db_port = env.int("POSTGRES_PORT")
+        self.__db_user = env("POSTGRES_USER")
+        self.__db_password = env("POSTGRES_PASSWORD")
+
+    def get_db_name(self) -> str:
+        return self.__db_name
+
+    def get_db_host(self) -> str:
+        return self.__db_host
+
+    def get_db_port(self) -> int:
+        return self.__db_port
+
+    def get_db_password(self) -> str:
+        return self.__db_password
+
+    def get_db_user(self) -> str:
+        return self.__db_user
+
