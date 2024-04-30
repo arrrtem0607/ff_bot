@@ -51,3 +51,21 @@ class InlineKeyboards:
                              callback_data=Admin(api=True))
         self.keyboard.adjust(1)
         return self.keyboard.as_markup()
+
+    async def build_goods_keyboard(self, goods):
+        for good in goods:
+            self.keyboard.button(text=f"{good.sku}",
+                                 callback_data=f"choose_{good.sku}")
+        self.keyboard.adjust(3)
+        return self.keyboard.as_markup()
+
+    async def choose_field(self):
+        self.keyboard.button(text='Название',
+                             callback_data='name')
+        self.keyboard.button(text='Техническое задание',
+                             callback_data='technical_task')
+        self.keyboard.button(text='Ссылка на видео',
+                             callback_data='video_url')
+        return self.keyboard.adjust(3).as_markup()
+
+

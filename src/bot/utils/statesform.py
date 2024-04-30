@@ -17,3 +17,9 @@ class AddNewSku(StatesGroup):
     ADD_DESCRIPTION = State()
     ADD_VIDEO_LINK = State()
     ADD_TO_DB = State()
+
+
+class UpdateGoods(StatesGroup):
+    choosing_sku = State()
+    choosing_field = State()
+    typing_new_value = State()

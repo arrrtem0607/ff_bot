@@ -6,16 +6,23 @@ from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.redis import Redis, RedisStorage
 import asyncio
 import logging
+import os
 from src.database.controllers.ORM import ORMController
 from src.google_sheets.controllers.google import SheetsController
 from src.google_sheets.entities.sheets import get_google_sheets
 
 
 logger = logging.getLogger(__name__)
+current_directory = os.path.dirname(os.path.abspath(__file__))
+log_file_path = os.path.join(current_directory, 'application.log')
 
 
 async def run_bot():
     config = get_config()
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s - [%(levelname)s] - %(name)s - "
+                               "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s",
+                        filename=log_file_path)
     redis: Redis = Redis(host='localhost')
     storage: RedisStorage = RedisStorage(redis=redis)
     # storage.redis.
@@ -26,9 +33,6 @@ async def run_bot():
     # print('Таблицы созданы')
     sheets_controller: SheetsController = SheetsController(await get_google_sheets(), config=config)
     await sheets_controller.set_spreadsheet_and_worksheet()
-    logging.basicConfig(level=logging.INFO,
-                        format="%(asctime)s - [%(levelname)s] - %(name)s - "
-                               "(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s")
     admins_id: int = config.bot_config.get_developers_id()
     default: DefaultBotProperties = DefaultBotProperties(parse_mode="HTML")
     bot: Bot = Bot(config.bot_config.get_token(), default=default)
