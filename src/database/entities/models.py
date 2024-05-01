@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, Float, BIGINT, ForeignKey, DateTime
+from sqlalchemy import Integer, String, Float, BIGINT, ForeignKey, DateTime, CheckConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from src.database.entities.enums import AnnotatedTypes
 from src.database.entities.core import Base
@@ -6,6 +6,9 @@ from src.database.entities.core import Base
 
 class Worker(Base):
     __tablename__ = "workers"
+    __table_args__ = (
+        CheckConstraint("role IN ('admin', 'packer', 'manager') OR role IS NULL"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String(256), nullable=True, unique=True)
