@@ -8,9 +8,9 @@ class Workers(Base):
     __tablename__ = "workers"
 
     id: Mapped[AnnotatedTypes.int_pk]
-    username: Mapped[str] = mapped_column(String(256))
+    username: Mapped[str] = mapped_column(String(256), nullable=True)
     tg_id: Mapped[int] = mapped_column(BIGINT)
-    phone: Mapped[str] = mapped_column(String(18))
+    phone: Mapped[str] = mapped_column(String(18), nullable=True)
 
 
 class Goods(Base):
