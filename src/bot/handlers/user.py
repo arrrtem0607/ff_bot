@@ -14,7 +14,7 @@ router: Router = Router()
 
 logger = logging.getLogger(__name__)
 
-
+'''
 @router.message(Command("start"))
 async def get_start(message: Message, state: FSMContext, authorized: bool):
     # Логируем начало обработки команды
@@ -66,6 +66,7 @@ async def get_contact(message: Message, bot: Bot, config: MainConfig):
     except Exception as e:
         logger.error(f"Ошибка при отправке сообщения администратору: {e}")
         await message.answer("Произошла ошибка. Пожалуйста, попробуйте позже.")
+'''
 
 
 # Функции отслеживания время упаковки

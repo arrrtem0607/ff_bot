@@ -88,3 +88,10 @@ class InlineKeyboards:
                                  callback_data=f"choose_{worker.name}")
         self.keyboard.adjust(3)
         return self.keyboard.as_markup()
+
+    def choose_role(self):
+        self.keyboard.button(text='Администратор', callback_data='admin')
+        self.keyboard.button(text='Упаковщик', callback_data='packer')
+        self.keyboard.button(text='Грузчик', callback_data='loader')
+        self.keyboard.button(text='Менеджер', callback_data='manager')
+        return self.keyboard.adjust(3).as_markup()

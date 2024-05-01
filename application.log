@@ -1,2 +1,499 @@
 2024-05-01 15:10:02,239 - [ERROR] - aiogram.dispatcher - (dispatcher.py)._listen_updates(219) - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
 2024-05-01 15:10:02,240 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._listen_updates(221) - Sleep for 4.923246 seconds and try again... (tryings = 79, bot id = 7109162915)
+2024-05-01 16:01:47,552 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:05:55,880 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:06:53,060 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:06:55,820 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:06:55,907 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:08:17,458 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:08:17,460 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:08:17,460 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:08:20,544 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:08:22,850 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:08:22,910 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:08:38,689 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800487 is handled. Duration 258 ms by bot id=7109162915
+2024-05-01 16:28:29,380 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:28:29,383 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:28:29,383 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:28:32,507 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:28:34,734 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:28:34,816 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:28:38,520 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800488 is not handled. Duration 5 ms by bot id=7109162915
+2024-05-01 16:28:38,520 - [ERROR] - aiogram.event - (dispatcher.py)._process_update(315) - Cause exception while process update id=999800488 by bot id=7109162915
+TypeError: get_start() missing 1 required positional argument: 'authorized'
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/config.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: get_start() missing 1 required positional argument: 'authorized'
+2024-05-01 16:28:48,095 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800489 is not handled. Duration 2 ms by bot id=7109162915
+2024-05-01 16:28:48,096 - [ERROR] - aiogram.event - (dispatcher.py)._process_update(315) - Cause exception while process update id=999800489 by bot id=7109162915
+TypeError: get_start() missing 1 required positional argument: 'authorized'
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/config.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: get_start() missing 1 required positional argument: 'authorized'
+2024-05-01 16:31:43,752 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:31:43,757 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:31:43,757 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:31:47,149 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:31:50,199 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:31:50,275 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:31:50,402 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:31:50,403 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:31:50,403 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:31:50,690 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:31:50,690 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800490 is handled. Duration 314 ms by bot id=7109162915
+2024-05-01 16:31:54,100 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800491 is handled. Duration 434 ms by bot id=7109162915
+2024-05-01 16:32:00,313 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800492 is handled. Duration 102 ms by bot id=7109162915
+2024-05-01 16:36:05,039 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:36:05,041 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:36:05,041 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:36:35,081 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:36:37,156 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:36:37,236 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:36:37,342 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:36:37,342 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:36:37,343 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:36:37,741 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:36:37,742 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800493 is handled. Duration 418 ms by bot id=7109162915
+2024-05-01 16:36:39,167 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:36:39,168 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:36:39,168 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:36:39,316 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:36:39,316 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800494 is handled. Duration 166 ms by bot id=7109162915
+2024-05-01 16:36:42,360 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800495 is handled. Duration 523 ms by bot id=7109162915
+2024-05-01 16:36:43,747 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800496 is handled. Duration 408 ms by bot id=7109162915
+2024-05-01 16:36:47,113 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800497 is handled. Duration 190 ms by bot id=7109162915
+2024-05-01 16:36:55,655 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800498 is handled. Duration 145 ms by bot id=7109162915
+2024-05-01 16:36:58,185 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800499 is handled. Duration 153 ms by bot id=7109162915
+2024-05-01 16:36:59,571 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800500 is handled. Duration 93 ms by bot id=7109162915
+2024-05-01 16:37:01,757 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800501 is handled. Duration 181 ms by bot id=7109162915
+2024-05-01 16:39:38,463 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:39:38,465 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:39:38,466 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:39:41,828 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:39:47,609 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:39:49,522 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:39:49,585 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:39:53,652 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:39:53,652 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:39:53,653 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:39:54,062 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:39:54,063 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800502 is handled. Duration 425 ms by bot id=7109162915
+2024-05-01 16:39:56,873 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800503 is handled. Duration 529 ms by bot id=7109162915
+2024-05-01 16:39:58,705 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800504 is handled. Duration 433 ms by bot id=7109162915
+2024-05-01 16:40:11,399 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:40:11,400 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:40:11,400 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:40:30,687 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:40:32,523 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:40:32,590 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:40:33,243 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:40:33,244 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:40:33,244 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:40:33,504 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:40:33,505 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800505 is handled. Duration 302 ms by bot id=7109162915
+2024-05-01 16:40:36,012 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800506 is handled. Duration 425 ms by bot id=7109162915
+2024-05-01 16:40:37,189 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800507 is handled. Duration 204 ms by bot id=7109162915
+2024-05-01 16:40:39,074 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800508 is handled. Duration 312 ms by bot id=7109162915
+2024-05-01 16:40:42,220 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800509 is handled. Duration 193 ms by bot id=7109162915
+2024-05-01 16:40:45,019 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800510 is handled. Duration 413 ms by bot id=7109162915
+2024-05-01 16:40:49,238 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800511 is handled. Duration 428 ms by bot id=7109162915
+2024-05-01 16:40:50,308 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800512 is handled. Duration 103 ms by bot id=7109162915
+2024-05-01 16:40:51,657 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800513 is handled. Duration 180 ms by bot id=7109162915
+2024-05-01 16:40:55,571 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800514 is handled. Duration 95 ms by bot id=7109162915
+2024-05-01 16:40:57,292 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800515 is handled. Duration 113 ms by bot id=7109162915
+2024-05-01 16:41:05,814 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800516 is handled. Duration 244 ms by bot id=7109162915
+2024-05-01 16:41:06,730 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800517 is handled. Duration 176 ms by bot id=7109162915
+2024-05-01 16:41:07,779 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800518 is handled. Duration 201 ms by bot id=7109162915
+2024-05-01 16:41:09,604 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800519 is handled. Duration 120 ms by bot id=7109162915
+2024-05-01 16:50:41,512 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:50:41,514 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:50:41,515 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:50:45,033 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:50:48,906 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:50:49,236 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:50:49,807 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:50:49,808 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:50:49,808 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:50:50,305 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:50:50,305 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800520 is handled. Duration 513 ms by bot id=7109162915
+2024-05-01 16:50:54,138 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800521 is handled. Duration 1235 ms by bot id=7109162915
+2024-05-01 16:50:55,674 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800522 is handled. Duration 408 ms by bot id=7109162915
+2024-05-01 16:50:57,426 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800523 is handled. Duration 94 ms by bot id=7109162915
+2024-05-01 16:51:00,954 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800524 is handled. Duration 186 ms by bot id=7109162915
+2024-05-01 16:51:02,686 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800525 is handled. Duration 225 ms by bot id=7109162915
+2024-05-01 16:51:04,203 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800526 is handled. Duration 82 ms by bot id=7109162915
+2024-05-01 16:51:08,290 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800527 is not handled. Duration 3 ms by bot id=7109162915
+2024-05-01 16:51:27,385 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800528 is not handled. Duration 6 ms by bot id=7109162915
+2024-05-01 16:51:53,913 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:51:53,916 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:51:53,916 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:51:57,178 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:51:59,235 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:51:59,317 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:52:01,209 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:52:01,210 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:52:01,210 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:52:01,432 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:52:01,432 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800529 is handled. Duration 247 ms by bot id=7109162915
+2024-05-01 16:52:04,381 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800530 is handled. Duration 604 ms by bot id=7109162915
+2024-05-01 16:52:07,670 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800531 is handled. Duration 216 ms by bot id=7109162915
+2024-05-01 16:52:11,768 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800532 is handled. Duration 125 ms by bot id=7109162915
+2024-05-01 16:52:19,503 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800533 is handled. Duration 97 ms by bot id=7109162915
+2024-05-01 16:52:20,673 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800534 is handled. Duration 93 ms by bot id=7109162915
+2024-05-01 16:52:23,797 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800535 is handled. Duration 198 ms by bot id=7109162915
+2024-05-01 16:52:26,923 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800536 is not handled. Duration 11 ms by bot id=7109162915
+2024-05-01 16:52:26,925 - [ERROR] - aiogram.event - (dispatcher.py)._process_update(315) - Cause exception while process update id=999800536 by bot id=7109162915
+TypeError: input_new_value_to_db() missing 1 required positional argument: 'callback'
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/database.py", line 23, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/storage.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/role.py", line 32, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/sheets.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: input_new_value_to_db() missing 1 required positional argument: 'callback'
+2024-05-01 16:57:50,893 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:57:50,896 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:57:50,897 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:57:54,334 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:57:56,762 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:57:56,841 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:58:04,713 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:58:04,714 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:58:04,714 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:58:05,104 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:58:05,104 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800537 is handled. Duration 419 ms by bot id=7109162915
+2024-05-01 16:58:08,559 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800538 is handled. Duration 523 ms by bot id=7109162915
+2024-05-01 16:58:09,888 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800539 is handled. Duration 209 ms by bot id=7109162915
+2024-05-01 16:58:13,125 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800540 is handled. Duration 97 ms by bot id=7109162915
+2024-05-01 16:58:15,473 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800541 is handled. Duration 100 ms by bot id=7109162915
+2024-05-01 16:58:16,524 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800542 is handled. Duration 99 ms by bot id=7109162915
+2024-05-01 16:58:17,995 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800543 is handled. Duration 281 ms by bot id=7109162915
+2024-05-01 16:58:19,289 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800544 is not handled. Duration 2 ms by bot id=7109162915
+2024-05-01 16:58:41,923 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 16:58:41,926 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:58:41,926 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 16:58:45,053 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 16:58:47,069 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 16:58:47,131 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 16:58:51,159 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 16:58:51,159 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 16:58:51,159 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 16:58:51,369 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 16:58:51,370 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800545 is handled. Duration 221 ms by bot id=7109162915
+2024-05-01 16:58:53,817 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800546 is handled. Duration 453 ms by bot id=7109162915
+2024-05-01 16:58:54,958 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800547 is handled. Duration 194 ms by bot id=7109162915
+2024-05-01 16:58:57,842 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800548 is handled. Duration 228 ms by bot id=7109162915
+2024-05-01 16:59:02,427 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800549 is handled. Duration 220 ms by bot id=7109162915
+2024-05-01 16:59:05,451 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800550 is handled. Duration 106 ms by bot id=7109162915
+2024-05-01 16:59:10,260 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800551 is handled. Duration 99 ms by bot id=7109162915
+2024-05-01 16:59:11,291 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800552 is not handled. Duration 3 ms by bot id=7109162915
+2024-05-01 17:02:01,194 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 17:02:01,198 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 17:02:01,198 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 17:02:04,244 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 17:02:06,077 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 17:02:06,134 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 17:02:09,856 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 17:02:09,857 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 17:02:09,857 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 17:02:10,258 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 17:02:10,258 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800553 is handled. Duration 412 ms by bot id=7109162915
+2024-05-01 17:02:13,387 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800554 is handled. Duration 735 ms by bot id=7109162915
+2024-05-01 17:02:14,977 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800555 is handled. Duration 540 ms by bot id=7109162915
+2024-05-01 17:02:21,382 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800556 is handled. Duration 412 ms by bot id=7109162915
+2024-05-01 17:02:22,397 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800557 is handled. Duration 95 ms by bot id=7109162915
+2024-05-01 17:02:23,872 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800558 is handled. Duration 356 ms by bot id=7109162915
+2024-05-01 17:02:24,921 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800559 is handled. Duration 181 ms by bot id=7109162915
+2024-05-01 17:02:26,188 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800560 is not handled. Duration 8 ms by bot id=7109162915
+2024-05-01 17:02:26,188 - [ERROR] - aiogram.event - (dispatcher.py)._process_update(315) - Cause exception while process update id=999800560 by bot id=7109162915
+TypeError: input_new_value_to_db() missing 1 required positional argument: 'callback'
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/database.py", line 23, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/storage.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/scheduler.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/role.py", line 32, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/sheets.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: input_new_value_to_db() missing 1 required positional argument: 'callback'
+2024-05-01 17:06:26,008 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-01 17:06:26,012 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 17:06:26,012 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-01 17:06:29,252 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-01 17:06:31,988 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-01 17:06:32,049 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-01 17:06:35,983 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(32) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-01 17:06:35,984 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(36) - Состояние для пользователя arrrteminc очищено
+2024-05-01 17:06:35,984 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(40) - Пользователь arrrteminc не авторизован. Запрашиваем номер телефона.
+2024-05-01 17:06:36,354 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(46) - Состояние пользователя arrrteminc установлено на GET_CONTACT
+2024-05-01 17:06:36,354 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800561 is handled. Duration 447 ms by bot id=7109162915
+2024-05-01 17:06:39,223 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800562 is handled. Duration 947 ms by bot id=7109162915
+2024-05-01 17:06:40,495 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800563 is handled. Duration 446 ms by bot id=7109162915
+2024-05-01 17:06:45,768 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800564 is handled. Duration 164 ms by bot id=7109162915
+2024-05-01 17:06:46,820 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800565 is handled. Duration 83 ms by bot id=7109162915
+2024-05-01 17:06:47,892 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800566 is handled. Duration 92 ms by bot id=7109162915
+2024-05-01 17:06:48,944 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800567 is handled. Duration 100 ms by bot id=7109162915
+2024-05-01 17:06:50,242 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800568 is handled. Duration 356 ms by bot id=7109162915
+2024-05-01 17:06:57,580 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800569 is handled. Duration 277 ms by bot id=7109162915
+2024-05-01 17:06:58,628 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800570 is handled. Duration 225 ms by bot id=7109162915
+2024-05-01 17:06:59,544 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800571 is handled. Duration 178 ms by bot id=7109162915
+2024-05-01 17:07:05,271 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800572 is handled. Duration 212 ms by bot id=7109162915
+2024-05-01 17:07:10,382 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800573 is handled. Duration 102 ms by bot id=7109162915
+2024-05-01 17:07:12,398 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800574 is handled. Duration 138 ms by bot id=7109162915
+2024-05-01 17:07:13,832 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800575 is handled. Duration 179 ms by bot id=7109162915
+2024-05-01 17:07:15,067 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800576 is handled. Duration 402 ms by bot id=7109162915
+2024-05-01 17:07:44,873 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800577 is handled. Duration 426 ms by bot id=7109162915
+2024-05-01 17:07:45,820 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800578 is handled. Duration 134 ms by bot id=7109162915
+2024-05-01 17:07:47,415 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800579 is handled. Duration 196 ms by bot id=7109162915
+2024-05-01 17:07:48,719 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800580 is handled. Duration 282 ms by bot id=7109162915
+2024-05-01 17:07:49,816 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800581 is handled. Duration 156 ms by bot id=7109162915
+2024-05-01 17:07:50,895 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800582 is handled. Duration 83 ms by bot id=7109162915
+2024-05-01 17:07:52,007 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800583 is handled. Duration 123 ms by bot id=7109162915
+2024-05-01 17:07:55,775 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800584 is handled. Duration 339 ms by bot id=7109162915

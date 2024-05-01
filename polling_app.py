@@ -29,7 +29,7 @@ async def run_bot():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     scheduler.start()
     orm_controller: ORMController = ORMController()
-    # await orm_controller.create_tables()
+    await orm_controller.create_tables()
     # print('Таблицы созданы')
     sheets_controller: SheetsController = SheetsController(await get_google_sheets(), config=config)
     await sheets_controller.set_spreadsheet_and_worksheet()

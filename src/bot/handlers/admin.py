@@ -170,12 +170,19 @@ async def choosing_worker_field(callback: callback_query, state: FSMContext):
 async def typing_new_value_worker(callback: callback_query, state: FSMContext):
     field = callback.data
     await state.update_data(field=field)
-    await callback.message.edit_text(text=f'Введите новое значения для поля {field}')
+    if field == 'role':
+        await callback.message.edit_text(text='Выберите роль',
+                                         reply_markup=InlineKeyboards().choose_role())
+    else:
+        await callback.message.edit_text(text=f'Введите новое значения для поля {field}')
     await state.set_state(UpdateWorkers.typing_new_value_worker)
 
 
 @router.message(F.text, UpdateWorkers.typing_new_value_worker)
-async def input_new_value_to_db(message: Message, state: FSMContext, db_controller: ORMController, bot: Bot):
+async def input_new_text_value(message: Message,
+                               state: FSMContext,
+                               db_controller: ORMController,
+                               bot: Bot):
     new_data = await state.get_data()
     worker_name = new_data.get('worker_name')
     field = new_data.get('field')
@@ -183,7 +190,31 @@ async def input_new_value_to_db(message: Message, state: FSMContext, db_controll
         value = int(message.text)
     else:
         value = message.text
+
+    await db_controller.change_data_worker(worker_name=worker_name,
+                                           field=field,
+                                           value=value)
     await bot.send_message(chat_id=message.chat.id,
                            text='Информация изменена, продолжайте работу',
                            reply_markup=InlineKeyboards().admin_menu())
-    await db_controller.change_data_worker(worker_name=worker_name, field=field, value=value)
+
+
+@router.callback_query(F.data, UpdateWorkers.typing_new_value_worker)
+async def input_new_callback_value(callback: callback_query,
+                                   state: FSMContext,
+                                   db_controller:
+                                   ORMController, bot: Bot):
+    new_data = await state.get_data()
+    worker_name = new_data.get('worker_name')
+    field = new_data.get('field')
+    value = callback.data
+
+    await db_controller.change_data_worker(worker_name=worker_name,
+                                           field=field,
+                                           value=value)
+    await callback.answer('Информация изменена')
+    await bot.send_message(chat_id=callback.from_user.id,
+                           text='Информация изменена, продолжайте работу',
+                           reply_markup=InlineKeyboards().admin_menu())
+
+

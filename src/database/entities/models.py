@@ -7,7 +7,7 @@ from src.database.entities.core import Base
 class Worker(Base):
     __tablename__ = "workers"
     __table_args__ = (
-        CheckConstraint("role IN ('admin', 'packer', 'manager') OR role IS NULL"),
+        CheckConstraint("role IN ('admin', 'packer', 'manager', 'loader') OR role IS NULL"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
