@@ -34,12 +34,18 @@ async def run_bot():
     sheets_controller: SheetsController = SheetsController(await get_google_sheets(), config=config)
     await sheets_controller.set_spreadsheet_and_worksheet()
     admins_id: int = config.bot_config.get_developers_id()
+    admins_rights: list = config.bot_config.get_rights('admins')
+    packers_rights: list = config.bot_config.get_rights('packers')
+    managers_rights: list = config.bot_config.get_rights('managers')
     default: DefaultBotProperties = DefaultBotProperties(parse_mode="HTML")
     bot: Bot = Bot(config.bot_config.get_token(), default=default)
     dp: Dispatcher = Dispatcher(storage=storage)
     dp.include_router(await get_all_routers(
         storage=storage,
         admins_id=admins_id,
+        admins_rights=admins_rights,
+        packers_rights=packers_rights,
+        managers_rights=managers_rights,
         scheduler=scheduler,
         orm_controller=orm_controller,
         sheets_controller=sheets_controller,

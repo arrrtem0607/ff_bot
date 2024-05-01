@@ -10,13 +10,19 @@ from src.bot.middlewares.config import ConfigMiddleware
 from src.bot.middlewares.storage import StorageMiddleware
 from src.bot.middlewares.scheduler import ApschedulerMiddleware
 from src.bot.middlewares.database import DatabaseMiddleware
+from src.bot.middlewares.role import AccessMiddleware
 from src.bot.filters.admin import ChatAdminFilter, ChatTypeFilter
 from src.bot.handlers.start_end import router as start_end_router
 from src.database.controllers.ORM import ORMController
 from src.google_sheets.controllers.google import SheetsController
 
 
-async def get_all_routers(storage: RedisStorage, admins_id: int, scheduler: AsyncIOScheduler,
+async def get_all_routers(storage: RedisStorage,
+                          admins_id: int,
+                          admins_rights: list,
+                          packers_rights: list,
+                          managers_rights: list,
+                          scheduler: AsyncIOScheduler,
                           orm_controller: ORMController,
                           config: MainConfig,
                           sheets_controller: SheetsController) -> Router:
@@ -30,14 +36,18 @@ async def get_all_routers(storage: RedisStorage, admins_id: int, scheduler: Asyn
     user.router.callback_query.middleware(DatabaseMiddleware(orm_controller))
     user.router.message.middleware(SheetsMiddleware(sheets_controller))
     user.router.callback_query.middleware(SheetsMiddleware(sheets_controller))
+    user_router.message.middleware(AccessMiddleware(packers_rights))
+    user_router.callback_query.middleware(AccessMiddleware(packers_rights))
 
     admin.router.message.middleware(DatabaseMiddleware(orm_controller))
     admin_router.callback_query.middleware(DatabaseMiddleware(orm_controller))
     admin_router.message.middleware(StorageMiddleware(storage))
     admin_router.callback_query.middleware(StorageMiddleware(storage))
     admin_router.callback_query.middleware(ApschedulerMiddleware(scheduler))
-    admin_router.message.filter(ChatAdminFilter(admins_id))
-    admin_router.callback_query.filter(ChatAdminFilter(admins_id))
+    admin_router.message.middleware(AccessMiddleware(admins_rights))
+    admin_router.callback_query.middleware(AccessMiddleware(admins_rights))
+    # admin_router.message.filter(ChatAdminFilter(admins_id))
+    # admin_router.callback_query.filter(ChatAdminFilter(admins_id))
     admin.router.message.middleware(SheetsMiddleware(sheets_controller))
     admin.router.callback_query.middleware(SheetsMiddleware(sheets_controller))
 
