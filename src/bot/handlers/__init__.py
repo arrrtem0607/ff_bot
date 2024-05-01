@@ -27,6 +27,7 @@ async def get_all_routers(storage: RedisStorage,
                           config: MainConfig,
                           sheets_controller: SheetsController) -> Router:
     start_end_router.message.middleware(ConfigMiddleware(config))
+    start_end_router.message.middleware(DatabaseMiddleware(orm_controller))
 
     user_router.message.middleware(StorageMiddleware(storage))
     user_router.callback_query.middleware(StorageMiddleware(storage))
