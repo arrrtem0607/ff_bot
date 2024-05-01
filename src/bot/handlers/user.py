@@ -52,6 +52,7 @@ async def get_contact(message: Message, bot: Bot, config: MainConfig):
     tg_id = message.from_user.id
     username = message.from_user.username or "None"
     phone = message.contact.phone_number or "None"
+    name = message.contact.first_name or "None"
     try:
         await bot.send_message(config.bot_config.get_developers_id(),
                                "Вам пришла заявка на авторизацию от сотрудника:\n\n"
@@ -60,7 +61,8 @@ async def get_contact(message: Message, bot: Bot, config: MainConfig):
                                f"Номер телефона: {phone}",
                                reply_markup=InlineKeyboards().admin_choice(tg_id=tg_id,
                                                                            username=username,
-                                                                           phone=phone))
+                                                                           phone=phone,
+                                                                           name=name))
     except Exception as e:
         logger.error(f"Ошибка при отправке сообщения администратору: {e}")
         await message.answer("Произошла ошибка. Пожалуйста, попробуйте позже.")

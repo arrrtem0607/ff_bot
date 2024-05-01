@@ -12,6 +12,7 @@ class AcceptChoice(CallbackData, prefix='AcceptChoice'):
     tg_id: int
     username: str
     phone: str
+    name: str
 
 
 class UserAnswer(CallbackData, prefix='UserAnswer'):

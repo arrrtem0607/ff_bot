@@ -4,7 +4,7 @@ from sqlalchemy.exc import NoResultFound
 import datetime
 
 from src.database.entities.core import Database, Base
-from src.database.entities.models import Workers, Goods, PackingInfo
+from src.database.entities.models import Worker, Good, PackingInfo
 
 
 class ORMController:
@@ -22,7 +22,7 @@ class ORMController:
     async def check_worker(self, tg_id: int) -> bool:
         async with self.db.async_session_factory() as session:
             try:
-                (await session.execute(select(Workers).where(Workers.tg_id == tg_id))).one()
+                (await session.execute(select(Worker).where(Worker.tg_id == tg_id))).one()
                 return True
             except NoResultFound:
                 return False
@@ -34,8 +34,12 @@ class ORMController:
 
     async def insert_worker(self, tg_id: int,
                             username: str,
-                            phone: str) -> bool:
-        new_worker: Workers = Workers(tg_id=tg_id, username=username, phone=phone)
+                            phone: str,
+                            name: str) -> bool:
+        new_worker: Worker = Worker(tg_id=tg_id,
+                                    username=username,
+                                    phone=phone,
+                                    name=name)
         exec_code: bool = True
         async with self.db.async_session_factory() as session:
             try:
@@ -55,7 +59,7 @@ class ORMController:
         async with self.db.async_session_factory() as session:
             try:
                 result = await session.execute(
-                    select(Goods).options(joinedload(Goods.video_url)).filter(Goods.sku == sku)
+                    select(Good).options(joinedload(Good.video_url)).filter(Good.sku == sku)
                 )
                 good = result.scalars().first()
                 if good is None:
@@ -66,7 +70,7 @@ class ORMController:
                 return None
 
     async def add_new_sku(self, sku: int, sku_name: str, sku_technical_task: str, sku_video_link: str):
-        new_goods = Goods(
+        new_goods = Good(
             sku=sku,
             name=sku_name,
             technical_task=sku_technical_task,
@@ -75,7 +79,7 @@ class ORMController:
 
         async with self.db.async_session_factory() as session:
             try:
-                existing_goods = await session.get(Goods, sku)
+                existing_goods = await session.get(Good, sku)
                 if existing_goods:
                     return "Товар с таким SKU уже существует в базе данных."
                 else:
@@ -114,14 +118,14 @@ class ORMController:
         async with self.db.async_session_factory() as session:
             async with session.begin():
                 try:
-                    # Проверка на существование атрибута в модели Goods
-                    if not hasattr(Goods, attribute_name):
-                        raise ValueError(f"Attribute '{attribute_name}' does not exist in Goods model.")
+                    # Проверка на существование атрибута в модели Good
+                    if not hasattr(Good, attribute_name):
+                        raise ValueError(f"Attribute '{attribute_name}' does not exist in Good model.")
 
                     # Динамически получаем атрибут модели
-                    attribute = getattr(Goods, attribute_name)
+                    attribute = getattr(Good, attribute_name)
 
-                    result = await session.execute(select(attribute).where(Goods.sku == sku))
+                    result = await session.execute(select(attribute).where(Good.sku == sku))
                     attribute_value = result.scalars().first()
 
                     if attribute_value is None:
@@ -141,18 +145,48 @@ class ORMController:
     async def get_all_goods(self):
         async with self.db.async_session_factory() as session:
             try:
-                result = await session.execute(select(Goods))
+                result = await session.execute(select(Good))
                 goods = result.scalars().all()
                 return goods
             except Exception as e:
                 print(f"Unexpected error when retrieving goods: {e}")
                 return None
 
-    async def change_data(self, sku: int, field: str, value: str):
+    async def get_all_workers(self):
+        async with self.db.async_session_factory() as session:
+            try:
+                result = await session.execute(select(Worker))
+                workers = result.scalars().all()
+                return workers
+            except Exception as e:
+                print(f"Unexpected error when retrieving goods: {e}")
+                return None
+
+    async def change_data_sku(self, sku: int, field: str, value: str):
         async with self.db.async_session_factory() as session:
 
-            stmt = update(Goods).where(Goods.sku == int(sku)).values({field: value})
+            stmt = update(Good).where(Good.sku == int(sku)).values({field: value})
 
             await session.execute(stmt)
 
             await session.commit()
+
+    async def change_data_worker(self, worker_name: str, field: str, value: str):
+        async with self.db.async_session_factory() as session:
+
+            stmt = update(Worker).where(Worker.name == worker_name).values({field: value})
+
+            await session.execute(stmt)
+
+            await session.commit()
+
+    async def role_ids(self, roles: list[str]):
+        async with self.db.async_session_factory() as session:
+            async with session.begin():
+                # Создание запроса с использованием in_, чтобы проверить,
+                # содержится ли роль пользователя в предоставленном списке ролей
+                stmt = select(Worker.tg_id).where(Worker.role.in_(roles))
+                result = await session.execute(stmt)
+                # Извлечение всех идентификаторов в список
+                accepted_ids = [id_[0] for id_ in result.scalars().all()]
+                return accepted_ids

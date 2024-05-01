@@ -11,14 +11,17 @@ class InlineKeyboards:
     def admin_menu(self):
         self.keyboard.button(text='Статистика по работникам', callback_data='status')
         self.keyboard.button(text='Добавить новый товар', callback_data='add')
-        self.keyboard.button(text='Изменить текущий товар', callback_data='change')
-        # self.keyboard.button(text=)
+        self.keyboard.button(text='Изменить текущий товар', callback_data='change_sku')
+        self.keyboard.button(text="Изменить информацию о сотрудниках", callback_data='change_worker')
         self.keyboard.adjust(1)
         return self.keyboard.as_markup()
 
-    def admin_choice(self, tg_id: int, username: str, phone: str) -> InlineKeyboardMarkup:
-        accept_data = AcceptChoice(accept=True, tg_id=tg_id, username=username, phone=phone)
-        reject_data = AcceptChoice(accept=False, tg_id=tg_id, username=username, phone=phone)
+    def admin_choice(self, tg_id: int,
+                     username: str,
+                     phone: str,
+                     name: str) -> InlineKeyboardMarkup:
+        accept_data = AcceptChoice(accept=True, tg_id=tg_id, username=username, phone=phone, name=name)
+        reject_data = AcceptChoice(accept=False, tg_id=tg_id, username=username, phone=phone, name=name)
         self.keyboard.button(text="Одобрить ✅", callback_data=accept_data)
         self.keyboard.button(text="Отклонить ❌", callback_data=reject_data)
         self.keyboard.adjust(1)
@@ -59,7 +62,7 @@ class InlineKeyboards:
         self.keyboard.adjust(3)
         return self.keyboard.as_markup()
 
-    async def choose_field(self):
+    async def choose_sku_field(self):
         self.keyboard.button(text='Название',
                              callback_data='name')
         self.keyboard.button(text='Техническое задание',
@@ -68,4 +71,20 @@ class InlineKeyboards:
                              callback_data='video_url')
         return self.keyboard.adjust(3).as_markup()
 
+    async def choose_worker_field(self):
+        self.keyboard.button(text='Никнейм',
+                             callback_data='username')
+        self.keyboard.button(text='Имя',
+                             callback_data='name')
+        self.keyboard.button(text='Должность',
+                             callback_data='role')
+        self.keyboard.button(text='Зарплата',
+                             callback_data='salary')
+        return self.keyboard.adjust(3).as_markup()
 
+    async def build_workers_keyboard(self, workers):
+        for worker in workers:
+            self.keyboard.button(text=f"{worker.name}",
+                                 callback_data=f"choose_{worker.name}")
+        self.keyboard.adjust(3)
+        return self.keyboard.as_markup()

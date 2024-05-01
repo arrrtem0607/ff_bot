@@ -21,5 +21,12 @@ class AddNewSku(StatesGroup):
 
 class UpdateGoods(StatesGroup):
     choosing_sku = State()
-    choosing_field = State()
-    typing_new_value = State()
+    choosing_field_sku = State()
+    typing_new_value_sku = State()
+
+
+class UpdateWorkers(StatesGroup):
+    choosing_worker = State()
+    choosing_field_worker = State()
+    typing_new_value_worker = State()
+
