@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import joinedload
 from sqlalchemy.exc import NoResultFound
 import datetime
@@ -65,24 +65,29 @@ class ORMController:
                 print(f"Unexpected error: {e}")
                 return None
 
-    async def add_new_sku(self, sku: int,
-                          sku_name: str,
-                          sku_technical_task: str,
-                          sku_video_link: str):
-        # Создаем объект товара
+    async def add_new_sku(self, sku: int, sku_name: str, sku_technical_task: str, sku_video_link: str):
         new_goods = Goods(
-            sku=int(sku),
+            sku=sku,
             name=sku_name,
             technical_task=sku_technical_task,
             video_url=sku_video_link
         )
 
-        # Добавление нового товара в базу данных
         async with self.db.async_session_factory() as session:
-            async with session.begin():
-                session.add(new_goods)
-            await session.commit()  # Подтверждение изменений
-            return "Товар успешно добавлен."
+            try:
+                existing_goods = await session.get(Goods, sku)
+                if existing_goods:
+                    return "Товар с таким SKU уже существует в базе данных."
+                else:
+                    session.add(new_goods)
+                    text = "Товар успешно добавлен."
+
+                await session.commit()
+                return text
+
+            except Exception as e:
+                await session.rollback()
+                raise e
 
     async def add_packing_info(self, sku: int,
                                username: str,
@@ -132,3 +137,22 @@ class ORMController:
                 except Exception as e:
                     print(f"Unexpected error: {e}")
                     return None
+
+    async def get_all_goods(self):
+        async with self.db.async_session_factory() as session:
+            try:
+                result = await session.execute(select(Goods))
+                goods = result.scalars().all()
+                return goods
+            except Exception as e:
+                print(f"Unexpected error when retrieving goods: {e}")
+                return None
+
+    async def change_data(self, sku: int, field: str, value: str):
+        async with self.db.async_session_factory() as session:
+
+            stmt = update(Goods).where(Goods.sku == int(sku)).values({field: value})
+
+            await session.execute(stmt)
+
+            await session.commit()

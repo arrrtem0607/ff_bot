@@ -67,7 +67,6 @@ async def get_contact(message: Message, bot: Bot, config: MainConfig):
 
 
 # Функции отслеживания время упаковки
-
 @router.callback_query(F.data == 'start_packing')
 async def start_to_pack(message: Message, bot: Bot, state: FSMContext):
 
