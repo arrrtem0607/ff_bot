@@ -34,10 +34,10 @@ class PackingInfo(Base):
     __tablename__ = "packing_info"
 
     id: Mapped[AnnotatedTypes.int_pk] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    sku: Mapped[int] = mapped_column(Integer, ForeignKey('goods.sku'))
+    sku: Mapped[int] = mapped_column(Integer, ForeignKey('goods.sku'), nullable=True)
     username: Mapped[str] = mapped_column(String(256), ForeignKey('workers.username'), nullable=True)
     start_time: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
     end_time: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
     duration: Mapped[float] = mapped_column(Float, nullable=False)
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    performance: Mapped[float] = mapped_column(Float, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=True)
+    performance: Mapped[float] = mapped_column(Float, nullable=True)

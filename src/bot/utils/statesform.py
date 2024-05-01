@@ -3,12 +3,18 @@ from aiogram.fsm.state import State, StatesGroup
 
 class Authorization(StatesGroup):
     GET_CONTACT = State()
+    SET_NAME = State()
+    SET_ROLE = State()
 
 
 class Packing(StatesGroup):
     PRODUCT_SELECTION = State()
     PACKING_TIME = State()
     REPORT_PACKING_INFO = State()
+
+
+class Loading(StatesGroup):
+    OnLoading = State()
 
 
 class AddNewSku(StatesGroup):
@@ -29,4 +35,3 @@ class UpdateWorkers(StatesGroup):
     choosing_worker = State()
     choosing_field_worker = State()
     typing_new_value_worker = State()
-
