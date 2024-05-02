@@ -6,7 +6,6 @@ import logging
 
 from src.database.entities.core import Database, Base
 from src.database.entities.models import Worker, Good, PackingInfo
-from src.bot.middlewares.config import MainConfig
 from src.configurations import get_config
 
 logger = logging.getLogger(__name__)
