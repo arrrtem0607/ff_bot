@@ -8,6 +8,7 @@ class BotConfig:
         self.__packers_rights = env.list("PACKERS_RIGHTS")
         self.__managers_rights = env.list("MANAGERS_RIGHTS")
         self.__admins_rights = env.list("ADMINS_RIGHTS")
+        self.__loaders_rights = env.list("LOADERS_RIGHTS")
 
     def get_token(self) -> str:
         return self.__token
@@ -16,11 +17,13 @@ class BotConfig:
         return self.__developers_id
 
     def get_rights(self, role: str) -> list:
-        if role == 'packers':
+        if role == 'packer':
             return self.__packers_rights
-        elif role == 'managers':
+        elif role == 'manager':
             return self.__managers_rights
-        elif role == 'admins':
+        elif role == 'loader':
+            return self.__loaders_rights
+        elif role == 'admin':
             return self.__admins_rights
         else:
             return []

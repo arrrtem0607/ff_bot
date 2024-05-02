@@ -12,13 +12,13 @@ class InlineKeyboards:
             self.keyboard.button(text='Статистика по работникам', callback_data='status')
             self.keyboard.button(text='Добавить новый товар', callback_data='add')
             self.keyboard.button(text='Изменить текущий товар', callback_data='change_sku')
-            self.keyboard.button(text="Изменить информацию о сотрудниках", callback_data='change_worker')
+            self.keyboard.button(text="Изменить сотрудника", callback_data='change_worker')
         elif role == 'packer':
             self.keyboard.button(text='Начать упаковку', callback_data='start_packing')
         elif role == 'loader':
             self.keyboard.button(text='Начать упаковку', callback_data='start_packing')
             self.keyboard.button(text='Уйти на погрузку', callback_data='start_loading')
-        return self.keyboard.adjust(3).as_markup()
+        return self.keyboard.adjust(2).as_markup()
 
     def admin_choice(self, tg_id: int,
                      username: str,
@@ -82,3 +82,4 @@ class InlineKeyboards:
     def end_loading(self):
         self.keyboard.button(text='Закончить погрузку/разгрузку',
                              callback_data='end_loading')
+        return self.keyboard.adjust(1).as_markup()

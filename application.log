@@ -1,0 +1,250 @@
+2024-05-02 03:26:17,522 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800883 is not handled. Duration 28 ms by bot id=7109162915
+2024-05-02 03:26:17,522 - [ERROR] - aiogram.event - (dispatcher.py)._process_update(315) - Cause exception while process update id=999800883 by bot id=7109162915
+DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $5: datetime.timedelta(seconds=7, microsecon... (must be real number, not datetime.timedelta)
+[SQL: INSERT INTO packing_info (sku, username, start_time, end_time, duration, quantity, performance) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE, $5::FLOAT, $6::INTEGER, $7::FLOAT) RETURNING packing_info.id]
+[parameters: (None, 'arrrteminc', datetime.datetime(2024, 5, 2, 3, 26, 10, 253444), datetime.datetime(2024, 5, 2, 3, 26, 17, 510790), datetime.timedelta(seconds=7, microseconds=257346), None, None)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+Traceback (most recent call last):
+  File "asyncpg/protocol/prepared_stmt.pyx", line 175, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+  File "asyncpg/protocol/codecs/base.pyx", line 227, in asyncpg.protocol.protocol.Codec.encode
+  File "asyncpg/protocol/codecs/base.pyx", line 129, in asyncpg.protocol.protocol.Codec.encode_scalar
+  File "asyncpg/pgproto/./codecs/float.pyx", line 27, in asyncpg.pgproto.pgproto.float8_encode
+TypeError: must be real number, not datetime.timedelta
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 538, in _prepare_and_execute
+    self._rows = await prepared_stmt.fetch(*parameters)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 176, in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 241, in __bind_execute
+    data, status, _ = await self.__do_execute(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/asyncpg/prepared_stmt.py", line 230, in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 186, in bind_execute
+  File "asyncpg/protocol/prepared_stmt.pyx", line 204, in asyncpg.protocol.protocol.PreparedStatementState._encode_bind_msg
+asyncpg.exceptions.DataError: invalid input for query argument $5: datetime.timedelta(seconds=7, microsecon... (must be real number, not datetime.timedelta)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1971, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 919, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 572, in execute
+    self._adapt_connection.await_(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 131, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 550, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 501, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 789, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.Error: <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $5: datetime.timedelta(seconds=7, microsecon... (must be real number, not datetime.timedelta)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/middlewares/user_context.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/fsm/middleware.py", line 41, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 156, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 128, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 123, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/router.py", line 148, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/storage.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/config.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/database.py", line 23, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/sheets.py", line 19, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/middlewares/role.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/aiogram/dispatcher/event/handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/bot/handlers/loader.py", line 37, in end_loading
+    await db_controller.add_loading_info(username=username,
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/src/database/controllers/ORM.py", line 135, in add_loading_info
+    await session.commit()
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 1009, in commit
+    await greenlet_spawn(self.sync_session.commit)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 203, in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1972, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1257, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+                ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1232, in _prepare_impl
+    self.session.flush()
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4296, in flush
+    self._flush(objects)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4431, in _flush
+    with util.safe_reraise():
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 4392, in _flush
+    flush_context.execute()
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/orm/persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1422, in execute
+    return meth(
+           ^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 514, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1644, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1850, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1990, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2357, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1971, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 919, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 572, in execute
+    self._adapt_connection.await_(
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 131, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 550, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 501, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/DlyaNas/Desktop/Proga/PhyBots/Asinc/FF_main/.venv/lib/python3.12/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 789, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.DBAPIError: (sqlalchemy.dialects.postgresql.asyncpg.Error) <class 'asyncpg.exceptions.DataError'>: invalid input for query argument $5: datetime.timedelta(seconds=7, microsecon... (must be real number, not datetime.timedelta)
+[SQL: INSERT INTO packing_info (sku, username, start_time, end_time, duration, quantity, performance) VALUES ($1::INTEGER, $2::VARCHAR, $3::TIMESTAMP WITHOUT TIME ZONE, $4::TIMESTAMP WITHOUT TIME ZONE, $5::FLOAT, $6::INTEGER, $7::FLOAT) RETURNING packing_info.id]
+[parameters: (None, 'arrrteminc', datetime.datetime(2024, 5, 2, 3, 26, 10, 253444), datetime.datetime(2024, 5, 2, 3, 26, 17, 510790), datetime.timedelta(seconds=7, microseconds=257346), None, None)]
+(Background on this error at: https://sqlalche.me/e/20/dbapi)
+2024-05-02 03:28:54,443 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-02 03:28:54,446 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-02 03:28:54,447 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-02 03:28:57,580 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-02 03:28:59,614 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-02 03:28:59,889 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-02 03:29:00,058 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(41) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-02 03:29:00,059 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(45) - Состояние для пользователя arrrteminc очищено
+2024-05-02 03:29:00,059 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(58) - Пользователь arrrteminc авторизован. Отправляем приветствие.
+2024-05-02 03:29:00,270 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(62) - Приветственное сообщение отправлено пользователю arrrteminc
+2024-05-02 03:29:00,270 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800884 is handled. Duration 240 ms by bot id=7109162915
+2024-05-02 03:29:02,179 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800885 is handled. Duration 123 ms by bot id=7109162915
+2024-05-02 03:29:04,197 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800886 is handled. Duration 113 ms by bot id=7109162915
+2024-05-02 03:29:44,884 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._signal_stop_polling(455) - Received SIGINT signal
+2024-05-02 03:29:44,886 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(359) - Polling stopped for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-02 03:29:44,886 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(554) - Polling stopped
+2024-05-02 03:29:48,266 - [INFO] - apscheduler.scheduler - (base.py).start(181) - Scheduler started
+2024-05-02 03:29:50,440 - [INFO] - aiogram.dispatcher - (dispatcher.py).start_polling(527) - Start polling
+2024-05-02 03:29:50,501 - [INFO] - aiogram.dispatcher - (dispatcher.py)._polling(341) - Run polling for bot @send_my_logs_bot id=7109162915 - 'send_logs'
+2024-05-02 03:29:56,606 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(41) - Обработка команды 'start' для пользователя arrrteminc
+2024-05-02 03:29:56,607 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(45) - Состояние для пользователя arrrteminc очищено
+2024-05-02 03:29:56,607 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(58) - Пользователь arrrteminc авторизован. Отправляем приветствие.
+2024-05-02 03:29:56,840 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(62) - Приветственное сообщение отправлено пользователю arrrteminc
+2024-05-02 03:29:56,841 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800887 is handled. Duration 254 ms by bot id=7109162915
+2024-05-02 03:31:44,388 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(41) - Обработка команды 'start' для пользователя eduard_772
+2024-05-02 03:31:44,390 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(45) - Состояние для пользователя eduard_772 очищено
+2024-05-02 03:31:44,390 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(58) - Пользователь eduard_772 авторизован. Отправляем приветствие.
+2024-05-02 03:31:44,661 - [INFO] - src.bot.handlers.start_end - (start_end.py).get_start(62) - Приветственное сообщение отправлено пользователю eduard_772
+2024-05-02 03:31:44,662 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800888 is handled. Duration 286 ms by bot id=7109162915
+2024-05-02 03:32:37,847 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800889 is handled. Duration 362 ms by bot id=7109162915
+2024-05-02 03:32:42,317 - [INFO] - src.bot.handlers.packer - (packer.py).pack_products(113) - Состояние:Packing:PACKING_TIME
+2024-05-02 03:32:42,318 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800890 is handled. Duration 113 ms by bot id=7109162915
+2024-05-02 03:32:43,771 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800891 is handled. Duration 214 ms by bot id=7109162915
+2024-05-02 03:32:47,330 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800892 is handled. Duration 183 ms by bot id=7109162915
+2024-05-02 03:32:57,558 - [ERROR] - aiogram.dispatcher - (dispatcher.py)._listen_updates(219) - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2024-05-02 03:32:57,558 - [WARNING] - aiogram.dispatcher - (dispatcher.py)._listen_updates(221) - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7109162915)
+2024-05-02 03:32:59,601 - [INFO] - aiogram.dispatcher - (dispatcher.py)._listen_updates(233) - Connection established (tryings = 1, bot id = 7109162915)
+2024-05-02 03:32:59,866 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800893 is handled. Duration 263 ms by bot id=7109162915
+2024-05-02 03:33:01,846 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800894 is handled. Duration 94 ms by bot id=7109162915
+2024-05-02 03:33:05,243 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800895 is handled. Duration 130 ms by bot id=7109162915
+2024-05-02 03:33:07,109 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800896 is handled. Duration 102 ms by bot id=7109162915
+2024-05-02 03:33:09,965 - [INFO] - aiogram.event - (dispatcher.py).feed_update(172) - Update id=999800897 is not handled. Duration 4 ms by bot id=7109162915

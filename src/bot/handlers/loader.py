@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Функция для учета времени погрузки и разгрузки
 @router.callback_query(F.data == 'start_loading')
 async def loading(callback: callback_query, state: FSMContext):
-    start_loading_time = datetime.now()
+    start_loading_time = datetime.now().isoformat()
     reply_markup = InlineKeyboards().end_loading()
     await callback.message.edit_text(text='Время погрузки/разгрузки товара засечено, '
                                           'не забудьте отметиться после того, как закончите',
@@ -31,9 +31,11 @@ async def loading(callback: callback_query, state: FSMContext):
 async def end_loading(callback: callback_query, state: FSMContext, db_controller: ORMController):
     end_loading_time = datetime.now()
     load_data = await state.get_data()
-    start_loading_time = load_data.get('start_loading_time')
-    duration = end_loading_time - start_loading_time
+    start_loading_time = datetime.fromisoformat(load_data.get('start_loading_time'))
+    duration = (end_loading_time - start_loading_time).total_seconds()  # Преобразование в секунды
     username = callback.from_user.username or 'None'
+
+    # Теперь duration это float число, которое можно сохранить в базе данных
     await db_controller.add_loading_info(username=username,
                                          start_time=start_loading_time,
                                          end_time=end_loading_time,

@@ -20,9 +20,11 @@ class AccessMiddleware(BaseMiddleware):
         self.user: User = data.get('event_from_user')
         self.bot: Bot = data.get('bot')
 
+
         if User:
             user_role = await self.db_controller.get_user_role(self.user.id)
             if user_role not in self.allowed_roles:
+                print(self.allowed_roles)
                 await self.bot.send_message(chat_id=self.user.id, text="У вас нет прав для выполнения этой команды.")
                 return
         return await handler(event, data)

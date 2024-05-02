@@ -125,8 +125,6 @@ async def end_packing(callback: callback_query, state: FSMContext):
 
 @router.message(F.text, Packing.REPORT_PACKING_INFO)
 async def report_packing(message: Message, bot: Bot, state: FSMContext, db_controller: ORMController):
-    print('Я тут')
-    logger.info('Я тут')
     try:
         quantity_packing = int(message.text)
     except ValueError:
@@ -150,7 +148,7 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     performance = duration / quantity_packing
     performance = round(performance, 2)
     username = message.from_user.username or 'None'
-    role = db_controller.get_user_role(message.from_user.id)
+    role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text=f'Отличная работа, ты упаковал {quantity_packing} {name} всего за {duration} секунд. '
                                 f'Твоя производительность составила {performance} {name} в секунду',

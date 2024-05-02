@@ -66,11 +66,13 @@ async def set_role(callback: callback_query,
     tg_id = data.get('tg_id')
     await db_controller.change_data_worker(worker_name=name, field='role', value=callback.data)
     role = await db_controller.get_user_role(callback.from_user.id)
+    user_role = await db_controller.get_user_role(tg_id=tg_id)
+    await state.clear()
     await callback.message.edit_text(text='Сотрудник успешно добавлен в базу, продолжайте работать',
                                      reply_markup=InlineKeyboards().menu(role))
     await bot.send_message(chat_id=tg_id,
                            text="Вы успешно авторизованы в нашем боте! Можете приступать к работе!",
-                           reply_markup=InlineKeyboards().menu(role=role))
+                           reply_markup=InlineKeyboards().menu(role=user_role))
 # ____________________________________________________________
 
 
