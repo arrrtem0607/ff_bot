@@ -1,11 +1,12 @@
-from sqlalchemy import select, update, and_
+from sqlalchemy import select, update
 from sqlalchemy.orm import joinedload
-from sqlalchemy.exc import NoResultFound, SQLAlchemyError
+from sqlalchemy.exc import NoResultFound
 import datetime
 import logging
 
 from src.database.entities.core import Database, Base
 from src.database.entities.models import Worker, Good, PackingInfo
+from src.configurations import get_config
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +118,21 @@ class ORMController:
                 session.add(new_packing)
                 await session.commit()
 
+    async def add_loading_info(self, username: str,
+                               start_time: datetime,
+                               end_time: datetime,
+                               duration: float):
+        async with self.db.async_session_factory() as session:
+            async with session.begin():
+                new_packing = PackingInfo(
+                    username=username,
+                    start_time=start_time,
+                    end_time=end_time,
+                    duration=duration,
+                )
+                session.add(new_packing)
+                await session.commit()
+
     async def get_good_attribute_by_sku(self, sku: int, attribute_name: str):
         async with self.db.async_session_factory() as session:
             async with session.begin():
@@ -185,28 +201,18 @@ class ORMController:
 
     async def get_user_role(self, tg_id):
         async with self.db.async_session_factory() as session:
+            config = get_config()
             result = await session.execute(
                 select(Worker.role).where(Worker.tg_id == tg_id)
             )
             role_record = result.scalars().first()
+            admins_id: int = config.bot_config.get_developers_id()
+            if tg_id == admins_id:
+                role_record = 'admin'
             return role_record or "guest"
 
-    async def get_role_ids(self, roles: list[str]):
-        """Получить список Telegram ID пользователей по их ролям, исключая тех, у кого роль не определена."""
+    async def set_worker_name(self, name, tg_id):
         async with self.db.async_session_factory() as session:
-            try:
-                stmt = select(Worker.tg_id).where(
-                    and_(
-                        Worker.role.in_(roles),
-                        Worker.role.isnot(None)
-                    )
-                )
-                result = await session.execute(stmt)
-                accepted_ids = [id_ for id_ in result.scalars().all()]
-                return accepted_ids
-            except SQLAlchemyError as e:
-                logging.error(f"SQLAlchemy error while fetching role ids: {e}")
-                return []
-            except Exception as e:
-                logging.error(f"Unexpected error in role_ids: {e}")
-                return []
+            stmt = update(Worker).where(Worker.tg_id == tg_id).values(name=name)
+            await session.execute(stmt)
+            await session.commit()

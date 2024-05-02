@@ -2,7 +2,7 @@ from aiogram import Router, Bot, F
 from aiogram.filters import Command
 from aiogram.types import Message, callback_query
 from aiogram.fsm.context import FSMContext
-from src.bot.utils.statesform import AddNewSku, UpdateGoods, UpdateWorkers
+from src.bot.utils.statesform import AddNewSku, UpdateGoods, UpdateWorkers, Authorization
 from src.bot.utils.callbackfabric import AcceptChoice
 from src.database.controllers.ORM import ORMController
 from src.bot.keyboards.inline import InlineKeyboards
@@ -13,28 +13,66 @@ router: Router = Router()
 # ____________________________________________________________
 # Общие функции
 @router.message(Command('menu'))
-async def menu(message: Message):
-    await message.answer(text='Выберете действие', reply_markup=InlineKeyboards().admin_menu())
+async def menu(message: Message, db_controller: ORMController):
+    role = await db_controller.get_user_role(message.from_user.id)
+    await message.answer(text='Выберете действие',
+                         reply_markup=InlineKeyboards().menu(role))
 
 
 @router.callback_query(AcceptChoice.filter())
-async def accept(callback: callback_query, callback_data: AcceptChoice, db_controller: ORMController,
-                 bot: Bot):
+async def accept(callback: callback_query,
+                 callback_data: AcceptChoice,
+                 db_controller: ORMController,
+                 bot: Bot,
+                 state: FSMContext):
+    await state.update_data(tg_id=callback_data.tg_id)
     if callback_data.accept:
         status: bool = await db_controller.insert_worker(tg_id=callback_data.tg_id,
                                                          username=callback_data.username,
                                                          phone=callback_data.phone,
                                                          name=callback_data.name)
         if status:
-            await callback.message.edit_text(f"Сотрудник @{callback_data.username} успешно добавлен в базу данных!")
-            await bot.send_message(chat_id=callback_data.tg_id,
-                                   text="Вы успешно авторизованы в нашем боте! Можете приступать к работе!",
-                                   reply_markup=InlineKeyboards().start_packing())
+            await callback.message.edit_text(f"Сотрудник @{callback_data.username} успешно добавлен в базу данных!\n"
+                                             f"Введите имя сотрудника")
+            await state.set_state(Authorization.SET_NAME)
         else:
             await callback.message.edit_text("Произошла непредвиденная ошибка, срочно обратитесь в поддержку бота!")
     else:
         await callback.message.edit_text(text=f"Вы успешно отклонили заявку от человека @{callback_data.username}.")
         await bot.send_message(callback_data.tg_id, "Ваша заявка отклонена администрацией 😭")
+
+
+@router.message(F.text, Authorization.SET_NAME)
+async def set_name(message: Message,
+                   state: FSMContext,
+                   db_controller: ORMController):
+    name = message.text
+    await state.update_data(name=name)
+    data = await state.get_data()
+    tg_id = data.get('tg_id')
+    await db_controller.set_worker_name(name=name, tg_id=tg_id)
+    await message.answer(text='Выберите роль сотрудника',
+                         reply_markup=InlineKeyboards().choose_role())
+    await state.set_state(Authorization.SET_ROLE)
+
+
+@router.callback_query(F.data, Authorization.SET_ROLE)
+async def set_role(callback: callback_query,
+                   db_controller: ORMController,
+                   state: FSMContext,
+                   bot: Bot):
+    data = await state.get_data()
+    name = data.get('name')
+    tg_id = data.get('tg_id')
+    await db_controller.change_data_worker(worker_name=name, field='role', value=callback.data)
+    role = await db_controller.get_user_role(callback.from_user.id)
+    user_role = await db_controller.get_user_role(tg_id=tg_id)
+    await state.clear()
+    await callback.message.edit_text(text='Сотрудник успешно добавлен в базу, продолжайте работать',
+                                     reply_markup=InlineKeyboards().menu(role))
+    await bot.send_message(chat_id=tg_id,
+                           text="Вы успешно авторизованы в нашем боте! Можете приступать к работе!",
+                           reply_markup=InlineKeyboards().menu(role=user_role))
 # ____________________________________________________________
 
 
@@ -95,10 +133,10 @@ async def add_info_to_db(message: Message,
                                                      sku_name=sku_name,
                                                      sku_technical_task=sku_technical_task,
                                                      sku_video_link=sku_video_link)
-
+    role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text=result_message,
-                           reply_markup=InlineKeyboards().admin_menu())
+                           reply_markup=InlineKeyboards().menu(role=role))
     await state.clear()
 # __________________________________________________
 
@@ -138,9 +176,10 @@ async def input_new_value_to_db(message: Message, state: FSMContext, db_controll
     sku = new_data.get('sku')
     field = new_data.get('field')
     value = message.text
+    role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text='Информация изменена, продолжайте работу',
-                           reply_markup=InlineKeyboards().admin_menu())
+                           reply_markup=InlineKeyboards().menu(role=role))
     await db_controller.change_data_sku(sku=sku, field=field, value=value)
 # ___________________________________________________
 
@@ -194,9 +233,10 @@ async def input_new_text_value(message: Message,
     await db_controller.change_data_worker(worker_name=worker_name,
                                            field=field,
                                            value=value)
+    role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text='Информация изменена, продолжайте работу',
-                           reply_markup=InlineKeyboards().admin_menu())
+                           reply_markup=InlineKeyboards().menu(role=role))
 
 
 @router.callback_query(F.data, UpdateWorkers.typing_new_value_worker)
@@ -213,8 +253,7 @@ async def input_new_callback_value(callback: callback_query,
                                            field=field,
                                            value=value)
     await callback.answer('Информация изменена')
+    role = await db_controller.get_user_role(callback.from_user.id)
     await bot.send_message(chat_id=callback.from_user.id,
                            text='Информация изменена, продолжайте работу',
-                           reply_markup=InlineKeyboards().admin_menu())
-
-
+                           reply_markup=InlineKeyboards().menu(role=role))

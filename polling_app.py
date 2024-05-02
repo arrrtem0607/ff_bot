@@ -29,14 +29,15 @@ async def run_bot():
     scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
     scheduler.start()
     orm_controller: ORMController = ORMController()
-    await orm_controller.create_tables()
+    # await orm_controller.create_tables()
     # print('Таблицы созданы')
     sheets_controller: SheetsController = SheetsController(await get_google_sheets(), config=config)
     await sheets_controller.set_spreadsheet_and_worksheet()
     admins_id: int = config.bot_config.get_developers_id()
-    admins_rights: list = config.bot_config.get_rights('admins')
-    packers_rights: list = config.bot_config.get_rights('packers')
-    managers_rights: list = config.bot_config.get_rights('managers')
+    admins_rights: list = config.bot_config.get_rights('admin')
+    loaders_rights: list = config.bot_config.get_rights('loader')
+    packers_rights: list = config.bot_config.get_rights('packer')
+    managers_rights: list = config.bot_config.get_rights('manager')
     default: DefaultBotProperties = DefaultBotProperties(parse_mode="HTML")
     bot: Bot = Bot(config.bot_config.get_token(), default=default)
     dp: Dispatcher = Dispatcher(storage=storage)
@@ -45,6 +46,7 @@ async def run_bot():
         admins_id=admins_id,
         admins_rights=admins_rights,
         packers_rights=packers_rights,
+        loaders_rights=loaders_rights,
         managers_rights=managers_rights,
         scheduler=scheduler,
         orm_controller=orm_controller,
