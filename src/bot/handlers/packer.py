@@ -1,13 +1,10 @@
 from datetime import datetime
 import logging
 from aiogram import Router, Bot, F
-from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message, ReplyKeyboardRemove, callback_query
-from src.configurations import MainConfig
+from aiogram.types import Message, callback_query
 from src.bot.keyboards.inline import InlineKeyboards
-from src.bot.keyboards.reply import ReplyKeyboards
-from src.bot.utils.statesform import Authorization, Packing
+from src.bot.utils.statesform import Packing
 from src.database.controllers.ORM import ORMController
 
 router: Router = Router()
@@ -128,8 +125,6 @@ async def end_packing(callback: callback_query, state: FSMContext):
 
 @router.message(F.text, Packing.REPORT_PACKING_INFO)
 async def report_packing(message: Message, bot: Bot, state: FSMContext, db_controller: ORMController):
-    print('Я тут')
-    logger.info('Я тут')
     try:
         quantity_packing = int(message.text)
     except ValueError:
@@ -153,10 +148,11 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     performance = duration / quantity_packing
     performance = round(performance, 2)
     username = message.from_user.username or 'None'
+    role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text=f'Отличная работа, ты упаковал {quantity_packing} {name} всего за {duration} секунд. '
                                 f'Твоя производительность составила {performance} {name} в секунду',
-                           reply_markup=InlineKeyboards().start_packing())
+                           reply_markup=InlineKeyboards().menu(role))
     await db_controller.add_packing_info(sku=sku,
                                          username=username,
                                          start_time=start_time,
