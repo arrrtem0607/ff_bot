@@ -130,23 +130,28 @@ class ORMController:
                     # Обработка других возможных ошибок
                     print(f"Ошибка при добавлении данных: {e}")
 
-    async def add_loading_info(self, username: str,
+    async def add_loading_info(self, tg_id: int,
                                start_time: datetime,
                                end_time: datetime,
                                duration: float):
-        sheets = await get_google_sheets()
-        sh_controller = SheetsController(sheets, config)
         async with self.db.async_session_factory() as session:
             async with session.begin():
-                new_packing = PackingInfo(
-                    username=username,
-                    start_time=start_time,
-                    end_time=end_time,
-                    duration=duration,
+                result = await session.execute(
+                    select(Worker.username).where(Worker.tg_id == tg_id)
                 )
-                session.add(new_packing)
-                await session.commit()
-                await sh_controller.insert_data(new_packing)
+                username = result.scalar()
+
+                try:
+                    new_loading = PackingInfo(
+                        username=username,
+                        start_time=start_time,
+                        end_time=end_time,
+                        duration=duration,
+                    )
+                    session.add(new_loading)
+                    await session.commit()
+                except Exception as e:
+                    print(f"Ошибка при добавлении информации о загрузке: {e}")
 
     async def get_good_attribute_by_sku(self, sku: int, attribute_name: str):
         async with self.db.async_session_factory() as session:
