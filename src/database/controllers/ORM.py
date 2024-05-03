@@ -7,8 +7,11 @@ import logging
 from src.database.entities.core import Database, Base
 from src.database.entities.models import Worker, Good, PackingInfo
 from src.configurations import get_config
+from src.google_sheets.controllers.google import SheetsController
+from src.google_sheets.entities.sheets import get_google_sheets
 
 logger = logging.getLogger(__name__)
+config = get_config()
 
 
 class ORMController:
@@ -98,7 +101,7 @@ class ORMController:
                 raise e
 
     async def add_packing_info(self, sku: int,
-                               username: str,
+                               tg_id: int,
                                start_time: datetime,
                                end_time: datetime,
                                duration: float,
@@ -106,22 +109,33 @@ class ORMController:
                                performance: float):
         async with self.db.async_session_factory() as session:
             async with session.begin():
-                new_packing = PackingInfo(
-                    sku=sku,
-                    username=username,
-                    start_time=start_time,
-                    end_time=end_time,
-                    duration=duration,
-                    quantity=quantity_packing,
-                    performance=performance
+                result = await session.execute(
+                    select(Worker.username).where(Worker.tg_id == tg_id)
                 )
-                session.add(new_packing)
-                await session.commit()
+                username = result.scalar()
+
+                try:
+                    new_packing = PackingInfo(
+                        sku=sku,
+                        username=username,
+                        start_time=start_time,
+                        end_time=end_time,
+                        duration=duration,
+                        quantity=quantity_packing,
+                        performance=performance
+                    )
+                    session.add(new_packing)
+                    await session.commit()
+                except Exception as e:
+                    # Обработка других возможных ошибок
+                    print(f"Ошибка при добавлении данных: {e}")
 
     async def add_loading_info(self, username: str,
                                start_time: datetime,
                                end_time: datetime,
                                duration: float):
+        sheets = await get_google_sheets()
+        sh_controller = SheetsController(sheets, config)
         async with self.db.async_session_factory() as session:
             async with session.begin():
                 new_packing = PackingInfo(
@@ -132,6 +146,7 @@ class ORMController:
                 )
                 session.add(new_packing)
                 await session.commit()
+                await sh_controller.insert_data(new_packing)
 
     async def get_good_attribute_by_sku(self, sku: int, attribute_name: str):
         async with self.db.async_session_factory() as session:
@@ -201,14 +216,13 @@ class ORMController:
 
     async def get_user_role(self, tg_id):
         async with self.db.async_session_factory() as session:
-            config = get_config()
             result = await session.execute(
                 select(Worker.role).where(Worker.tg_id == tg_id)
             )
             role_record = result.scalars().first()
             admins_id: int = config.bot_config.get_developers_id()
             if tg_id == admins_id:
-                role_record = 'admin'
+                role_record = 'packer'
             return role_record or "guest"
 
     async def set_worker_name(self, name, tg_id):

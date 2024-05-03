@@ -147,14 +147,14 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     duration = (end_time - start_time).total_seconds()
     performance = duration / quantity_packing
     performance = round(performance, 2)
-    username = message.from_user.username or 'None'
+    tg_id = message.from_user.id
     role = await db_controller.get_user_role(message.from_user.id)
     await bot.send_message(chat_id=message.chat.id,
                            text=f'Отличная работа, ты упаковал {quantity_packing} {name} всего за {duration} секунд. '
                                 f'Твоя производительность составила {performance} {name} в секунду',
                            reply_markup=InlineKeyboards().menu(role))
     await db_controller.add_packing_info(sku=sku,
-                                         username=username,
+                                         tg_id=tg_id,
                                          start_time=start_time,
                                          end_time=end_time,
                                          duration=duration,

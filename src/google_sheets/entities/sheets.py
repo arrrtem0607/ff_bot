@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from google.oauth2.service_account import Credentials
 from gspread_asyncio import (
     AsyncioGspreadClient,
