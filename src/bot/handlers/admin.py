@@ -2,12 +2,16 @@ from aiogram import Router, Bot, F
 from aiogram.filters import Command
 from aiogram.types import Message, callback_query
 from aiogram.fsm.context import FSMContext
+
+import logging
+
 from src.bot.utils.statesform import AddNewSku, UpdateGoods, UpdateWorkers, Authorization
 from src.bot.utils.callbackfabric import AcceptChoice
 from src.database.controllers.ORM import ORMController
 from src.bot.keyboards.inline import InlineKeyboards
 
 router: Router = Router()
+logger = logging.getLogger(__name__)
 
 
 # ____________________________________________________________
