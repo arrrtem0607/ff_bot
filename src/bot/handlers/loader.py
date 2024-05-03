@@ -32,11 +32,10 @@ async def end_loading(callback: callback_query, state: FSMContext, db_controller
     end_loading_time = datetime.now()
     load_data = await state.get_data()
     start_loading_time = datetime.fromisoformat(load_data.get('start_loading_time'))
-    duration = (end_loading_time - start_loading_time).total_seconds()  # Преобразование в секунды
-    username = callback.from_user.username or 'None'
+    duration = (end_loading_time - start_loading_time).total_seconds()
+    tg_id = callback.message.chat.id
 
-    # Теперь duration это float число, которое можно сохранить в базе данных
-    await db_controller.add_loading_info(username=username,
+    await db_controller.add_loading_info(tg_id=tg_id,
                                          start_time=start_loading_time,
                                          end_time=end_loading_time,
                                          duration=duration)
