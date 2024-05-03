@@ -93,6 +93,7 @@ async def pack_products(message: Message, bot: Bot, state: FSMContext, db_contro
     if good:
 
         await state.update_data(sku=sku)
+        await state.update_data(good=good)
         await bot.send_message(chat_id=message.chat.id,
                                text=f'Время упаковки засечено. '
                                     f'Не забывайте отмечаться в конце упаковки. '
@@ -108,9 +109,8 @@ async def pack_products(message: Message, bot: Bot, state: FSMContext, db_contro
         '''
 
         await state.update_data(start_packing_time=datetime.now().isoformat())
+        logger.info(f"Сотрудник {message.from_user.name} принялся за упаковку {good}")
         await state.set_state(Packing.PACKING_TIME)
-        stata = await state.get_state()
-        logger.info(f'Состояние:{stata}')
 
     else:
         await message.answer(text="Товар с таким SKU не найден. Введите корректный артикул")
@@ -130,6 +130,7 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     except ValueError:
         await bot.send_message(chat_id=message.chat.id,
                                text='Количество должно быть числом')
+        logger.info(f"Сотрудник {message.from_user.name} неправильно ввел упаковку")
         return
 
     await state.update_data(quantity_packing=quantity_packing)
@@ -139,19 +140,19 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     start_time = datetime.fromisoformat(packing_info.get('start_packing_time'))
     end_time = datetime.fromisoformat(packing_info.get('end_packing_time'))
     quantity_packing = packing_info.get('quantity_packing')
+    good = packing_info.get('good')
 
     await state.clear()
 
-    name = await db_controller.get_good_attribute_by_sku(sku=sku,
-                                                         attribute_name='name')
     duration = (end_time - start_time).total_seconds()
     performance = duration / quantity_packing
     performance = round(performance, 2)
     tg_id = message.from_user.id
     role = await db_controller.get_user_role(message.from_user.id)
+    logger.info(f"Сотрудник {message.from_user.name} закончил за упаковку {good}")
     await bot.send_message(chat_id=message.chat.id,
-                           text=f'Отличная работа, ты упаковал {quantity_packing} {name} всего за {duration} секунд. '
-                                f'Твоя производительность составила {performance} {name} в секунду',
+                           text=f'Отличная работа, ты упаковал {quantity_packing} {good} всего за {duration} секунд. '
+                                f'Твоя производительность составила {performance} {good} в секунду',
                            reply_markup=InlineKeyboards().menu(role))
     await db_controller.add_packing_info(sku=sku,
                                          tg_id=tg_id,
