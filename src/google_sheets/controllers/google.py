@@ -1,4 +1,6 @@
 from gspread_asyncio import AsyncioGspreadSpreadsheet, AsyncioGspreadClient, AsyncioGspreadWorksheet
+import datetime
+
 from src.configurations import MainConfig
 from src.google_sheets.entities.sheets import GoogleSheets
 
@@ -15,15 +17,18 @@ class SheetsController:
         self.__worksheet: AsyncioGspreadWorksheet = await self.__spreadsheet.get_worksheet(
             self.__config.sheets_config.get_table_num())
 
-    async def insert_data(self, data):
-        """ Добавляет новую строку данных в таблицу Google Sheets """
-        await self.__worksheet.append_row(data)
+    async def add_packing_info_to_sheet(self, sku: int, tg_id: int, username: str,
+                                        start_time: datetime, end_time: datetime,
+                                        duration: float, quantity_packing: int,
+                                        performance: float):
+        """Добавляет информацию об упаковке в Google Sheets"""
+        row = [sku, tg_id, username, start_time.isoformat(), end_time.isoformat(),
+               duration, quantity_packing, performance]
+        await self.__worksheet.append_row(row)
 
-    async def update_cell(self, cell_address, new_value):
-        """ Обновляет данные в указанной ячейке """
-        cell = await self.__worksheet.acell(cell_address)  # Получить ячейку
-        await self.__worksheet.update_acell(cell_address, new_value)  # Обновить значение ячейки
-
-    async def get_all_records(self):
-        """ Возвращает все записи из таблицы в виде списка словарей """
-        return await self.__worksheet.get_all_records()
+    async def add_loading_info_to_sheet(self, tg_id: int, username: str,
+                                        start_time: datetime, end_time: datetime,
+                                        duration: float):
+        """Добавляет информацию о погрузке в Google Sheets"""
+        row = [tg_id, username, start_time.isoformat(), end_time.isoformat(), duration]
+        await self.__worksheet.append_row(row)

@@ -7,8 +7,6 @@ import logging
 from src.database.entities.core import Database, Base
 from src.database.entities.models import Worker, Good, PackingInfo
 from src.configurations import get_config
-from src.google_sheets.controllers.google import SheetsController
-from src.google_sheets.entities.sheets import get_google_sheets
 
 logger = logging.getLogger(__name__)
 config = get_config()

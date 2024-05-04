@@ -1,69 +1,16 @@
-from datetime import datetime
-import logging
 from aiogram import Router, Bot, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, callback_query
+from datetime import datetime
+import logging
+
 from src.bot.keyboards.inline import InlineKeyboards
 from src.bot.utils.statesform import Packing
 from src.database.controllers.ORM import ORMController
+from src.google_sheets.controllers.google import SheetsController
 
 router: Router = Router()
-
 logger = logging.getLogger(__name__)
-
-'''
-@router.message(Command("start"))
-async def get_start(message: Message, state: FSMContext, authorized: bool):
-    # Логируем начало обработки команды
-    logger.info(f"Обработка команды 'start' для пользователя {message.from_user.username}")
-
-    # Очистка состояния пользователя
-    await state.clear()
-    logger.info(f"Состояние для пользователя {message.from_user.username} очищено")
-
-    if not authorized:
-        # Пользователь не авторизован, запрашиваем номер телефона
-        logger.info(f"Пользователь {message.from_user.username} не авторизован. Запрашиваем номер телефона.")
-        await message.answer("<b>Привет, я бот фулфилмент-центра! 👋</b>\n"
-                             "<i>Для начала работы необходимо авторизоваться. 🔑</i>\n\n"
-                             "Пожалуйста, отправьте свой номер телефона следующим сообщением.",
-                             reply_markup=ReplyKeyboards().contact_kb())
-        await state.set_state(Authorization.GET_CONTACT)
-        logger.info(f"Состояние пользователя {message.from_user.username} установлено на GET_CONTACT")
-    else:
-        # Пользователь авторизован, отправляем приветственное сообщение
-        logger.info(f"Пользователь {message.from_user.username} авторизован. Отправляем приветствие.")
-        await message.answer(text=f"С возвращением, {message.from_user.first_name}! Приятной работы! 🥰",
-                             reply_markup=InlineKeyboards().start_packing())
-        logger.info(f"Приветственное сообщение отправлено пользователю {message.from_user.username}")
-
-
-@router.message(F.contact, Authorization.GET_CONTACT)
-async def get_contact(message: Message, bot: Bot, config: MainConfig):
-    await message.answer("Отлично! Осталось совсем немного подождать, пока администрация бота одобрит Вашу заявку "
-                         "прежде, чем Вы сможете приступить к работе! 📦\n"
-                         "<b>Я обязательно пришлю Вам уведомление, когда это произойдёт</b> 😉")
-    msg: Message = await message.answer("Чистим за собой клавиатуры...",
-                                        reply_markup=ReplyKeyboardRemove())
-    await msg.delete()
-    tg_id = message.from_user.id
-    username = message.from_user.username or "None"
-    phone = message.contact.phone_number or "None"
-    name = message.contact.first_name or "None"
-    try:
-        await bot.send_message(config.bot_config.get_developers_id(),
-                               "Вам пришла заявка на авторизацию от сотрудника:\n\n"
-                               f"Имя (telegram): {message.from_user.first_name}\n"
-                               f"Username: {username}\n"
-                               f"Номер телефона: {phone}",
-                               reply_markup=InlineKeyboards().admin_choice(tg_id=tg_id,
-                                                                           username=username,
-                                                                           phone=phone,
-                                                                           name=name))
-    except Exception as e:
-        logger.error(f"Ошибка при отправке сообщения администратору: {e}")
-        await message.answer("Произошла ошибка. Пожалуйста, попробуйте позже.")
-'''
 
 
 # Функции отслеживания время упаковки
@@ -124,7 +71,11 @@ async def end_packing(callback: callback_query, state: FSMContext):
 
 
 @router.message(F.text, Packing.REPORT_PACKING_INFO)
-async def report_packing(message: Message, bot: Bot, state: FSMContext, db_controller: ORMController):
+async def report_packing(message: Message,
+                         bot: Bot,
+                         state: FSMContext,
+                         db_controller: ORMController,
+                         sh_controller: SheetsController):
     try:
         quantity_packing = int(message.text)
     except ValueError:
@@ -133,13 +84,11 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
         logger.info(f"Сотрудник {message.from_user.name} неправильно ввел упаковку")
         return
 
-    await state.update_data(quantity_packing=quantity_packing)
     packing_info = await state.get_data()
 
     sku = packing_info.get('sku')
     start_time = datetime.fromisoformat(packing_info.get('start_packing_time'))
     end_time = datetime.fromisoformat(packing_info.get('end_packing_time'))
-    quantity_packing = packing_info.get('quantity_packing')
     good = packing_info.get('good')
 
     await state.clear()
@@ -148,8 +97,10 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
     performance = duration / quantity_packing
     performance = round(performance, 2)
     tg_id = message.from_user.id
-    role = await db_controller.get_user_role(message.from_user.id)
+    role = await db_controller.get_user_role(tg_id=tg_id)
+
     logger.info(f"Сотрудник {message.from_user.name} закончил за упаковку {good}")
+
     await bot.send_message(chat_id=message.chat.id,
                            text=f'Отличная работа, ты упаковал {quantity_packing} {good} всего за {duration} секунд. '
                                 f'Твоя производительность составила {performance} {good} в секунду',
@@ -161,3 +112,14 @@ async def report_packing(message: Message, bot: Bot, state: FSMContext, db_contr
                                          duration=duration,
                                          quantity_packing=quantity_packing,
                                          performance=performance)
+    try:
+        await sh_controller.add_packing_info_to_sheet(sku=sku,
+                                                      tg_id=tg_id,
+                                                      username=(message.from_user.first_name or None),
+                                                      start_time=start_time,
+                                                      end_time=end_time,
+                                                      duration=duration,
+                                                      quantity_packing=quantity_packing,
+                                                      performance=performance)
+    except Exception as e:
+        logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')
