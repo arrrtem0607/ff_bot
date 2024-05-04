@@ -1,6 +1,7 @@
 from aiogram import Router, Bot, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, callback_query
+
 from datetime import datetime
 import logging
 
@@ -8,9 +9,12 @@ from src.bot.keyboards.inline import InlineKeyboards
 from src.bot.utils.statesform import Packing
 from src.database.controllers.ORM import ORMController
 from src.google_sheets.controllers.google import SheetsController
+from src.bot.utils.some_other_funcs import upload_file_to_yandex_disk
+from src.configurations import get_config
 
 router: Router = Router()
 logger = logging.getLogger(__name__)
+config = get_config()
 
 
 # Функции отслеживания время упаковки
@@ -44,8 +48,7 @@ async def pack_products(message: Message,
                                                                    attribute_name='technical_task')
     if good:
 
-        await state.update_data(sku=sku)
-        await state.update_data(good=good)
+        await state.update_data(sku=sku, good=good)
         await bot.send_message(chat_id=message.chat.id,
                                text=f'Время упаковки засечено. '
                                     f'Не забывайте отмечаться в конце упаковки. '
@@ -77,18 +80,32 @@ async def end_packing(callback: callback_query,
 
 
 @router.message(F.text, Packing.REPORT_PACKING_INFO)
-async def report_packing(message: Message,
-                         bot: Bot,
-                         state: FSMContext,
-                         db_controller: ORMController,
-                         sheets_controller: SheetsController):
+async def send_photo_of_packing(message: Message,
+                                state: FSMContext):
     try:
         quantity_packing = int(message.text)
     except ValueError:
-        await bot.send_message(chat_id=message.chat.id,
-                               text='Количество должно быть числом')
+        await message.answer(text='Количество должно быть числом')
         logger.info(f"Сотрудник {message.from_user.first_name} неправильно ввел упаковку")
         return
+
+    await message.answer('Отлично, осталось отправить фотоотчет о выполнении работы. '
+                         'Сфотографируйте коробку, паллет или просто товар, который вы упаковывали')
+    await state.update_data(quantity_packing=quantity_packing)
+    await state.set_state(Packing.SEND_PHOTO_REPORT)
+
+
+@router.message(F.photo, Packing.SEND_PHOTO_REPORT)
+async def send_report_to_db(message: Message,
+                            state: FSMContext,
+                            bot: Bot,
+                            db_controller: ORMController,
+                            sheets_controller: SheetsController):
+
+    photo = message.photo[-1]
+    photo_id = photo.file_id
+    file = await bot.get_file(photo_id)
+    file_path = file.file_path
 
     packing_info = await state.get_data()
 
@@ -96,6 +113,9 @@ async def report_packing(message: Message,
     start_time = datetime.fromisoformat(packing_info.get('start_packing_time'))
     end_time = datetime.fromisoformat(packing_info.get('end_packing_time'))
     good = packing_info.get('good')
+    quantity_packing = packing_info.get('quantity_packing')
+    await bot.download_file(file_path=file_path,
+                            destination=f'Упаковщик:{message.from_user.first_name}, SKU:{sku}, время:{end_time}.jpg')
 
     await state.clear()
 
@@ -104,6 +124,10 @@ async def report_packing(message: Message,
     performance = round(performance, 2)
     tg_id = message.from_user.id
     role = await db_controller.get_user_role(tg_id=tg_id)
+    photo_url = await upload_file_to_yandex_disk(file_path=f'Упаковщик:{message.from_user.first_name}, '
+                                                           f'SKU:{sku}, время:{end_time}.jpg',
+                                                 token=config.bot_config.get_yandex_disk_token())
+    print(photo_url)
 
     logger.info(f"Сотрудник {message.from_user.first_name} закончил за упаковку {good}")
 
@@ -117,7 +141,8 @@ async def report_packing(message: Message,
                                          end_time=end_time,
                                          duration=duration,
                                          quantity_packing=quantity_packing,
-                                         performance=performance)
+                                         performance=performance,
+                                         photo_url=photo_url)
     try:
         await sheets_controller.add_packing_info_to_sheet(sku=sku,
                                                           good=good,
@@ -127,6 +152,7 @@ async def report_packing(message: Message,
                                                           end_time=end_time,
                                                           duration=duration,
                                                           quantity_packing=quantity_packing,
-                                                          performance=performance)
+                                                          performance=performance,
+                                                          photo_url=photo_url)
     except Exception as e:
         logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')

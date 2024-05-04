@@ -23,10 +23,11 @@ class SheetsController:
                                         username: str,
                                         start_time: datetime, end_time: datetime,
                                         duration: float, quantity_packing: int,
-                                        performance: float):
+                                        performance: float,
+                                        photo_url: str):
         """Добавляет информацию об упаковке в Google Sheets"""
         row = [sku, good, tg_id, username, start_time.isoformat(), end_time.isoformat(),
-               duration, quantity_packing, performance]
+               duration, quantity_packing, performance, photo_url]
         await self.__worksheet.append_row(row)
 
     async def add_loading_info_to_sheet(self, tg_id: int, username: str,
@@ -37,6 +38,7 @@ class SheetsController:
         good = None
         quantity_packing = None
         performance = None
+        photo_url = None
         row = [sku, good, tg_id, username, start_time.isoformat(), end_time.isoformat(),
-               duration, quantity_packing, performance]
+               duration, quantity_packing, performance, photo_url]
         await self.__worksheet.append_row(row)

@@ -3,3 +3,4 @@
 .gitignore
 .idea
 application.log
+*.jpg
