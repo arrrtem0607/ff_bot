@@ -54,7 +54,7 @@ async def get_all_routers(storage: RedisStorage,
     packer_router.message.middleware(AccessMiddleware(packers_rights))
     packer_router.callback_query.middleware(AccessMiddleware(packers_rights))
 
-    admin.router.message.middleware(DatabaseMiddleware(orm_controller))
+    admin_router.message.middleware(DatabaseMiddleware(orm_controller))
     admin_router.callback_query.middleware(DatabaseMiddleware(orm_controller))
     admin_router.message.middleware(StorageMiddleware(storage))
     admin_router.callback_query.middleware(StorageMiddleware(storage))
@@ -63,8 +63,8 @@ async def get_all_routers(storage: RedisStorage,
     admin_router.callback_query.middleware(AccessMiddleware(admins_rights))
     # admin_router.message.filter(ChatAdminFilter(admins_id))
     # admin_router.callback_query.filter(ChatAdminFilter(admins_id))
-    admin.router.message.middleware(SheetsMiddleware(sheets_controller))
-    admin.router.callback_query.middleware(SheetsMiddleware(sheets_controller))
+    admin_router.message.middleware(SheetsMiddleware(sheets_controller))
+    admin_router.callback_query.middleware(SheetsMiddleware(sheets_controller))
 
     router: Router = Router()
     router.message.filter(ChatTypeFilter("private"))

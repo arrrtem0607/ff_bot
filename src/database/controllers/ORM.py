@@ -225,7 +225,7 @@ class ORMController:
             role_record = result.scalars().first()
             admins_id: int = config.bot_config.get_developers_id()
             if tg_id == admins_id:
-                role_record = 'packer'
+                role_record = 'loader'
             return role_record or "guest"
 
     async def set_worker_name(self, name, tg_id):

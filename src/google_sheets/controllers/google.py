@@ -17,12 +17,15 @@ class SheetsController:
         self.__worksheet: AsyncioGspreadWorksheet = await self.__spreadsheet.get_worksheet(
             self.__config.sheets_config.get_table_num())
 
-    async def add_packing_info_to_sheet(self, sku: int, tg_id: int, username: str,
+    async def add_packing_info_to_sheet(self, sku: int,
+                                        good: str,
+                                        tg_id: int,
+                                        username: str,
                                         start_time: datetime, end_time: datetime,
                                         duration: float, quantity_packing: int,
                                         performance: float):
         """Добавляет информацию об упаковке в Google Sheets"""
-        row = [sku, tg_id, username, start_time.isoformat(), end_time.isoformat(),
+        row = [sku, good, tg_id, username, start_time.isoformat(), end_time.isoformat(),
                duration, quantity_packing, performance]
         await self.__worksheet.append_row(row)
 
@@ -30,5 +33,10 @@ class SheetsController:
                                         start_time: datetime, end_time: datetime,
                                         duration: float):
         """Добавляет информацию о погрузке в Google Sheets"""
-        row = [tg_id, username, start_time.isoformat(), end_time.isoformat(), duration]
+        sku = None
+        good = None
+        quantity_packing = None
+        performance = None
+        row = [sku, good, tg_id, username, start_time.isoformat(), end_time.isoformat(),
+               duration, quantity_packing, performance]
         await self.__worksheet.append_row(row)

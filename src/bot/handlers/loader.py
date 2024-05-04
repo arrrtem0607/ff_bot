@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Функция для учета времени погрузки и разгрузки
 @router.callback_query(F.data == 'start_loading')
 async def loading(callback: callback_query, state: FSMContext):
-    logger.info(f"Сотрудник {callback.from_user.name} ушел на погрузку")
+    logger.info(f"Сотрудник {callback.from_user.first_name} ушел на погрузку")
     start_loading_time = datetime.now().isoformat()
     reply_markup = InlineKeyboards().end_loading()
     await callback.message.edit_text(text='Время погрузки/разгрузки товара засечено, '
@@ -32,8 +32,8 @@ async def loading(callback: callback_query, state: FSMContext):
 async def end_loading(callback: callback_query,
                       state: FSMContext,
                       db_controller: ORMController,
-                      sh_controller: SheetsController):
-    logger.info(f"Сотрудник {callback.from_user.name} вернулся с погрузки")
+                      sheets_controller: SheetsController):
+    logger.info(f"Сотрудник {callback.from_user.first_name} вернулся с погрузки")
     end_loading_time = datetime.now()
     load_data = await state.get_data()
     start_loading_time = datetime.fromisoformat(load_data.get('start_loading_time'))
@@ -46,11 +46,11 @@ async def end_loading(callback: callback_query,
                                          duration=duration)
     logger.info('Добавил информацию в БД')
     try:
-        await sh_controller.add_loading_info_to_sheet(tg_id=tg_id,
-                                                      username=(callback.from_user.first_name or None),
-                                                      start_time=start_loading_time,
-                                                      end_time=end_loading_time,
-                                                      duration=duration)
+        await sheets_controller.add_loading_info_to_sheet(tg_id=tg_id,
+                                                          username=(callback.from_user.first_name or None),
+                                                          start_time=start_loading_time,
+                                                          end_time=end_loading_time,
+                                                          duration=duration)
         logger.info('Добавил информацию в таблицы')
     except Exception as e:
         logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')
