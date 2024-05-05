@@ -1,12 +1,15 @@
 from aiogram.client.default import DefaultBotProperties
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from src.bot.handlers import get_all_routers
-from src.configurations import get_config
 from aiogram import Dispatcher, Bot
 from aiogram.fsm.storage.redis import Redis, RedisStorage
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 import asyncio
 import logging
 import os
+
+from src.bot.handlers import get_all_routers
+from src.configurations import get_config
 from src.database.controllers.ORM import ORMController
 from src.google_sheets.controllers.google import SheetsController
 from src.google_sheets.entities.sheets import get_google_sheets

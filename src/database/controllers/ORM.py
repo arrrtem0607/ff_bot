@@ -7,8 +7,6 @@ import logging
 from src.database.entities.core import Database, Base
 from src.database.entities.models import Worker, Good, PackingInfo
 from src.configurations import get_config
-from src.google_sheets.controllers.google import SheetsController
-from src.google_sheets.entities.sheets import get_google_sheets
 
 logger = logging.getLogger(__name__)
 config = get_config()
@@ -106,7 +104,8 @@ class ORMController:
                                end_time: datetime,
                                duration: float,
                                quantity_packing: int,
-                               performance: float):
+                               performance: float,
+                               photo_url: str):
         async with self.db.async_session_factory() as session:
             async with session.begin():
                 result = await session.execute(
@@ -122,7 +121,8 @@ class ORMController:
                         end_time=end_time,
                         duration=duration,
                         quantity=quantity_packing,
-                        performance=performance
+                        performance=performance,
+                        photo_url=photo_url
                     )
                     session.add(new_packing)
                     await session.commit()
@@ -227,11 +227,23 @@ class ORMController:
             role_record = result.scalars().first()
             admins_id: int = config.bot_config.get_developers_id()
             if tg_id == admins_id:
-                role_record = 'packer'
+                role_record = 'loader'
             return role_record or "guest"
 
     async def set_worker_name(self, name, tg_id):
         async with self.db.async_session_factory() as session:
             stmt = update(Worker).where(Worker.tg_id == tg_id).values(name=name)
+            await session.execute(stmt)
+            await session.commit()
+
+    async def update_packing_info_with_photo(self, packing_id: int, photo_url: str):
+        """
+        Обновляет запись об упаковке, добавляя URL фотографии.
+
+        :param packing_id: ID записи об упаковке
+        :param photo_url: URL фотографии для сохранения
+        """
+        async with self.db.async_session_factory() as session:
+            stmt = update(PackingInfo).where(PackingInfo.id == packing_id).values(photo_url=photo_url)
             await session.execute(stmt)
             await session.commit()

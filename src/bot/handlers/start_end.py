@@ -23,12 +23,15 @@ async def notify_start(bot: Bot, config: MainConfig):
 
 
 @router.shutdown()
-async def stop_bot(bot: Bot, config: MainConfig):
+async def stop_bot(bot: Bot,
+                   config: MainConfig):
     await bot.send_message(config.bot_config.get_developers_id(), "Бот остановлен!")
 
 
 @router.message(Command("cancel"))
-async def return_to_menu(message: Message, state: FSMContext, db_controller: ORMController):
+async def return_to_menu(message: Message,
+                         state: FSMContext,
+                         db_controller: ORMController):
     await state.clear()
     role = db_controller.get_user_role(message.from_user.id)
     await message.answer(text='Возвращаемся к началу упаковки',
@@ -36,7 +39,10 @@ async def return_to_menu(message: Message, state: FSMContext, db_controller: ORM
 
 
 @router.message(Command("start"))
-async def get_start(message: Message, state: FSMContext, authorized: bool, db_controller: ORMController):
+async def get_start(message: Message,
+                    state: FSMContext,
+                    authorized: bool,
+                    db_controller: ORMController):
     # Логируем начало обработки команды
     logger.info(f"Обработка команды 'start' для пользователя {message.from_user.username}")
 
