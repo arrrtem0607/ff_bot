@@ -10,8 +10,9 @@ class Authorization(StatesGroup):
 class Packing(StatesGroup):
     PRODUCT_SELECTION = State()
     PACKING_TIME = State()
-    SEND_PHOTO_REPORT = State()
     REPORT_PACKING_INFO = State()
+    REPORT_DEFECT_INFO = State()
+    SEND_PHOTO_REPORT = State()
 
 
 class Loading(StatesGroup):

@@ -4,11 +4,13 @@ from aiogram.types import Message, callback_query
 from aiogram.fsm.context import FSMContext
 
 import logging
+from typing import Any, Dict
 
 from src.bot.utils.statesform import AddNewSku, UpdateGoods, UpdateWorkers, Authorization
 from src.bot.utils.callbackfabric import AcceptChoice
 from src.database.controllers.ORM import ORMController
 from src.bot.keyboards.inline import InlineKeyboards
+from src.database.dumping_restore.dump_controoler import DatabaseAdapter, DatabaseDump
 
 router: Router = Router()
 logger = logging.getLogger(__name__)
@@ -261,3 +263,23 @@ async def input_new_callback_value(callback: callback_query,
     await bot.send_message(chat_id=callback.from_user.id,
                            text='Информация изменена, продолжайте работу',
                            reply_markup=InlineKeyboards().menu(role=role))
+
+
+@router.message(Command('dump'))
+async def dump_database(message: Message,
+                        config):
+    db_config = config.db_config
+    db_dump = DatabaseDump(db_config)
+    adapter = DatabaseAdapter()
+    adapter.dump_db(db_dump)
+    await message.answer("Dump базы данных создан успешно.")
+
+
+@router.message(Command('restore'))
+async def restore_database(message: Message,
+                           config):
+    db_config = config.db_config
+    db_dump = DatabaseDump(db_config)
+    adapter = DatabaseAdapter()
+    adapter.restore_db(db_dump)
+    await message.answer("Restore базы данных создан успешно.")

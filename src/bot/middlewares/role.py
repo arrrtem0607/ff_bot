@@ -20,7 +20,6 @@ class AccessMiddleware(BaseMiddleware):
         self.user: User = data.get('event_from_user')
         self.bot: Bot = data.get('bot')
 
-
         if User:
             user_role = await self.db_controller.get_user_role(self.user.id)
             if user_role not in self.allowed_roles:

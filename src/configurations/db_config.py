@@ -8,6 +8,8 @@ class DatabaseConfig:
         self.__db_port = env.int("POSTGRES_PORT")
         self.__db_user = env("POSTGRES_USER")
         self.__db_password = env("POSTGRES_PASSWORD")
+        self.__db_backup_file = env("DB_BACKUP")
+        self.__db_backup_contents = env("DB_BACKUP_CONTENTS")
 
     def get_db_name(self) -> str:
         return self.__db_name
@@ -24,3 +26,8 @@ class DatabaseConfig:
     def get_db_user(self) -> str:
         return self.__db_user
 
+    def get_db_backup_file(self) -> str:
+        return self.__db_backup_file
+
+    def get_db_backup_contents(self) -> str:
+        return self.__db_backup_contents
