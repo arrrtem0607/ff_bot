@@ -1,7 +1,7 @@
 from enum import EnumType
 from typing import Annotated
 
-from sqlalchemy import text
+from sqlalchemy import text, Enum
 from sqlalchemy.orm import mapped_column
 from datetime import datetime
 
@@ -12,3 +12,16 @@ class AnnotatedTypes(EnumType):
     updated_at = Annotated[datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"),
                                                    onupdate=datetime.utcnow
                                                    )]
+
+
+class RoleEnum(Enum):
+    admin = "admin"
+    packer = "packer"
+    manager = "manager"
+    loader = "loader"
+
+
+class ProcessEnum(Enum):
+    packing = "packing"
+    loading = "loading"
+    reception = "reception"

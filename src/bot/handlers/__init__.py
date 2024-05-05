@@ -65,6 +65,8 @@ async def get_all_routers(storage: RedisStorage,
     # admin_router.callback_query.filter(ChatAdminFilter(admins_id))
     admin_router.message.middleware(SheetsMiddleware(sheets_controller))
     admin_router.callback_query.middleware(SheetsMiddleware(sheets_controller))
+    admin_router.message.middleware(ConfigMiddleware(config))
+    admin_router.callback_query.middleware(ConfigMiddleware(config))
 
     router: Router = Router()
     router.message.filter(ChatTypeFilter("private"))

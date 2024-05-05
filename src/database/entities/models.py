@@ -41,4 +41,5 @@ class PackingInfo(Base):
     duration: Mapped[float] = mapped_column(Float, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=True)
     performance: Mapped[float] = mapped_column(Float, nullable=True)
+    defect: Mapped[int] = mapped_column(Integer, nullable=True)
     photo_url: Mapped[str] = mapped_column(String(255), nullable=True)

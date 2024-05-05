@@ -74,25 +74,40 @@ async def pack_products(message: Message,
 @router.callback_query(F.data == 'end_packing', Packing.PACKING_TIME)
 async def end_packing(callback: callback_query,
                       state: FSMContext):
-    await callback.message.edit_text(text='Время упаковки закончено. Введите количество упакованного товара')
-    await state.update_data(end_packing_time=datetime.now().isoformat())
+    await callback.message.edit_text(text='Время упаковки закончено.\n\n'
+                                          'Введите количество упакованного товара. '
+                                          'Бракованный товар не считается')
     await state.set_state(Packing.REPORT_PACKING_INFO)
 
 
 @router.message(F.text, Packing.REPORT_PACKING_INFO)
-async def send_photo_of_packing(message: Message,
-                                state: FSMContext):
+async def report_quantity_info(message: Message,
+                               state: FSMContext):
     try:
         quantity_packing = int(message.text)
     except ValueError:
         await message.answer(text='Количество должно быть числом')
-        logger.info(f"Сотрудник {message.from_user.first_name} неправильно ввел упаковку")
+        logger.info(f"Сотрудник {message.from_user.first_name} неправильно ввел количество упакованного товара")
         return
 
-    await message.answer('Отлично, осталось отправить фотоотчет о выполнении работы. '
-                         'Сфотографируйте коробку, паллет или просто товар, который вы упаковывали')
     await state.update_data(quantity_packing=quantity_packing)
+    await state.set_state(Packing.REPORT_DEFECT_INFO)
+    await message.answer('Спасибо, теперь напишите количество выявленного брака')
+
+
+@router.message(F.text, Packing.REPORT_DEFECT_INFO)
+async def report_defect_info(message: Message,
+                             state: FSMContext):
+    try:
+        quantity_defect = int(message.text)
+    except ValueError:
+        await message.answer(text='Количество должно быть числом')
+        logger.info(f"Сотрудник {message.from_user.first_name} неправильно ввел количество брака")
+        return
+
+    await state.update_data(quantity_defect=quantity_defect)
     await state.set_state(Packing.SEND_PHOTO_REPORT)
+    await message.answer('Отлично, осталось отправить фотоотчет выполненной работы. Сфотографируйте и отправьте')
 
 
 @router.message(F.photo, Packing.SEND_PHOTO_REPORT)
@@ -101,7 +116,7 @@ async def send_report_to_db(message: Message,
                             bot: Bot,
                             db_controller: ORMController,
                             sheets_controller: SheetsController):
-
+    end_time = datetime.now()
     photo = message.photo[-1]
     photo_id = photo.file_id
     file = await bot.get_file(photo_id)
@@ -111,9 +126,9 @@ async def send_report_to_db(message: Message,
 
     sku = packing_info.get('sku')
     start_time = datetime.fromisoformat(packing_info.get('start_packing_time'))
-    end_time = datetime.fromisoformat(packing_info.get('end_packing_time'))
     good = packing_info.get('good')
     quantity_packing = packing_info.get('quantity_packing')
+    quantity_defect = packing_info.get('quantity_defect')
     await bot.download_file(file_path=file_path,
                             destination=f'Упаковщик:{message.from_user.first_name}, SKU:{sku}, время:{end_time}.jpg')
 
@@ -127,7 +142,6 @@ async def send_report_to_db(message: Message,
     photo_url = await upload_file_to_yandex_disk(file_path=f'Упаковщик:{message.from_user.first_name}, '
                                                            f'SKU:{sku}, время:{end_time}.jpg',
                                                  token=config.bot_config.get_yandex_disk_token())
-    print(photo_url)
 
     logger.info(f"Сотрудник {message.from_user.first_name} закончил за упаковку {good}")
 
@@ -142,6 +156,7 @@ async def send_report_to_db(message: Message,
                                          duration=duration,
                                          quantity_packing=quantity_packing,
                                          performance=performance,
+                                         quantity_defect=quantity_defect,
                                          photo_url=photo_url)
     try:
         await sheets_controller.add_packing_info_to_sheet(sku=sku,
@@ -153,6 +168,7 @@ async def send_report_to_db(message: Message,
                                                           duration=duration,
                                                           quantity_packing=quantity_packing,
                                                           performance=performance,
+                                                          defect=quantity_defect,
                                                           photo_url=photo_url)
     except Exception as e:
         logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')
