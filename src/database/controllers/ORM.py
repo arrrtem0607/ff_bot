@@ -105,6 +105,7 @@ class ORMController:
                                duration: float,
                                quantity_packing: int,
                                performance: float,
+                               quantity_defect: int,
                                photo_url: str):
         async with self.db.async_session_factory() as session:
             async with session.begin():
@@ -122,12 +123,12 @@ class ORMController:
                         duration=duration,
                         quantity=quantity_packing,
                         performance=performance,
+                        defect=quantity_defect,
                         photo_url=photo_url
                     )
                     session.add(new_packing)
                     await session.commit()
                 except Exception as e:
-                    # Обработка других возможных ошибок
                     print(f"Ошибка при добавлении данных: {e}")
 
     async def add_loading_info(self, tg_id: int,
