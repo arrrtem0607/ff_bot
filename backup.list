@@ -1,0 +1,41 @@
+;
+; Archive created at 2024-05-06 02:00:03 MSK
+;     dbname: mydatabase
+;     TOC Entries: 31
+;     Compression: -1
+;     Dump Version: 1.14-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 12.18 (Ubuntu 12.18-0ubuntu0.20.04.1)
+;     Dumped by pg_dump version: 12.18 (Ubuntu 12.18-0ubuntu0.20.04.1)
+;
+;
+; Selected TOC Entries:
+;
+205; 1259 24641 TABLE public goods myuser
+204; 1259 24639 SEQUENCE public goods_id_seq myuser
+2968; 0 0 SEQUENCE OWNED BY public goods_id_seq myuser
+207; 1259 24654 TABLE public packing_info myuser
+206; 1259 24652 SEQUENCE public packing_info_id_seq myuser
+2969; 0 0 SEQUENCE OWNED BY public packing_info_id_seq myuser
+203; 1259 24625 TABLE public workers myuser
+202; 1259 24623 SEQUENCE public workers_id_seq myuser
+2970; 0 0 SEQUENCE OWNED BY public workers_id_seq myuser
+2813; 2604 24644 DEFAULT public goods id myuser
+2814; 2604 24657 DEFAULT public packing_info id myuser
+2811; 2604 24628 DEFAULT public workers id myuser
+2958; 0 24641 TABLE DATA public goods myuser
+2960; 0 24654 TABLE DATA public packing_info myuser
+2956; 0 24625 TABLE DATA public workers myuser
+2971; 0 0 SEQUENCE SET public goods_id_seq myuser
+2972; 0 0 SEQUENCE SET public packing_info_id_seq myuser
+2973; 0 0 SEQUENCE SET public workers_id_seq myuser
+2822; 2606 24649 CONSTRAINT public goods goods_pkey myuser
+2824; 2606 24651 CONSTRAINT public goods goods_sku_key myuser
+2826; 2606 24659 CONSTRAINT public packing_info packing_info_pkey myuser
+2816; 2606 24634 CONSTRAINT public workers workers_pkey myuser
+2818; 2606 24638 CONSTRAINT public workers workers_tg_id_key myuser
+2820; 2606 24636 CONSTRAINT public workers workers_username_key myuser
+2827; 2606 24660 FK CONSTRAINT public packing_info packing_info_sku_fkey myuser
+2828; 2606 24665 FK CONSTRAINT public packing_info packing_info_username_fkey myuser

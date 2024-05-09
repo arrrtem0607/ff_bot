@@ -34,6 +34,7 @@ class PackingInfo(Base):
     __tablename__ = "packing_info"
 
     id: Mapped[AnnotatedTypes.int_pk] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    type: Mapped[str] = mapped_column(String(256), nullable=True)
     sku: Mapped[int] = mapped_column(Integer, ForeignKey('goods.sku'), nullable=True)
     username: Mapped[str] = mapped_column(String(256), ForeignKey('workers.username'), nullable=True)
     start_time: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
