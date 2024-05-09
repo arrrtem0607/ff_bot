@@ -19,12 +19,10 @@ logger = logging.getLogger(__name__)
 @router.callback_query(F.data == 'start_loading')
 async def loading(callback: callback_query, state: FSMContext):
     logger.info(f"Сотрудник {callback.from_user.first_name} ушел на погрузку")
-    start_loading_time = datetime.now().isoformat()
-    reply_markup = InlineKeyboards().end_loading()
     await callback.message.edit_text(text='Время погрузки/разгрузки товара засечено, '
                                           'не забудьте отметиться после того, как закончите',
-                                     reply_markup=reply_markup)
-    await state.update_data(start_loading_time=start_loading_time)
+                                     reply_markup=InlineKeyboards().end_loading())
+    await state.update_data(start_loading_time=datetime.now().isoformat())
     await state.set_state(Loading.OnLoading)
 
 
@@ -32,30 +30,28 @@ async def loading(callback: callback_query, state: FSMContext):
 async def end_loading(callback: callback_query,
                       state: FSMContext,
                       db_controller: ORMController,
-                      sheets_controller: SheetsController):
+                      sheets_controller: SheetsController,
+                      role):
     logger.info(f"Сотрудник {callback.from_user.first_name} вернулся с погрузки")
-    end_loading_time = datetime.now()
     load_data = await state.get_data()
-    start_loading_time = datetime.fromisoformat(load_data.get('start_loading_time'))
-    duration = (end_loading_time - start_loading_time).total_seconds()
-    tg_id = callback.message.chat.id
+    await state.clear()
+    duration = (datetime.now() - datetime.fromisoformat(load_data.get('start_loading_time'))).total_seconds()
 
-    await db_controller.add_loading_info(tg_id=tg_id,
-                                         start_time=start_loading_time,
-                                         end_time=end_loading_time,
+    await db_controller.add_loading_info(tg_id=callback.message.chat.id,
+                                         start_time=datetime.fromisoformat(load_data.get('start_loading_time')),
+                                         end_time=datetime.now(),
                                          duration=duration)
     logger.info('Добавил информацию в БД')
     try:
-        await sheets_controller.add_loading_info_to_sheet(tg_id=tg_id,
+        await sheets_controller.add_loading_info_to_sheet(tg_id=callback.message.chat.id,
                                                           username=(callback.from_user.first_name or None),
-                                                          start_time=start_loading_time,
-                                                          end_time=end_loading_time,
+                                                          start_time=datetime.fromisoformat
+                                                          (load_data.get('start_loading_time')),
+                                                          end_time=datetime.now(),
                                                           duration=duration)
         logger.info('Добавил информацию в таблицы')
     except Exception as e:
         logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')
 
-    await state.clear()
-    role = await db_controller.get_user_role(callback.from_user.id)
     await callback.message.edit_text(text='Погрузка/разгрузка завершена, продолжайте работу',
                                      reply_markup=InlineKeyboards().menu(role=role))

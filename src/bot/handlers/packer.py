@@ -10,11 +10,9 @@ from src.bot.utils.statesform import Packing
 from src.database.controllers.ORM import ORMController
 from src.google_sheets.controllers.google import SheetsController
 from src.bot.utils.some_other_funcs import upload_file_to_yandex_disk
-from src.configurations import get_config
 
 router: Router = Router()
 logger = logging.getLogger(__name__)
-config = get_config()
 
 
 # Функции отслеживания время упаковки
@@ -40,22 +38,22 @@ async def pack_products(message: Message,
                                text='SKU должен быть числом')
         return
 
-    good = await db_controller.get_good_attribute_by_sku(sku=sku,
-                                                         attribute_name='name')
     # video_url = await db_controller.get_good_attribute_by_sku(sku=sku,attribute_name='video_url')
 
-    technical_task = await db_controller.get_good_attribute_by_sku(sku=sku,
-                                                                   attribute_name='technical_task')
-    if good:
+    if await db_controller.get_good_attribute_by_sku(sku=sku,
+                                                     attribute_name='name'):
 
-        await state.update_data(sku=sku, good=good)
+        await state.update_data(sku=sku, good=await db_controller.get_good_attribute_by_sku(sku=sku,
+                                                                                            attribute_name='name'))
         await bot.send_message(chat_id=message.chat.id,
                                text=f'Время упаковки засечено. '
                                     f'Не забывайте отмечаться в конце упаковки. '
                                     f'Для этого необходимо нажать на кнопку '
                                     f'под этим сообщением. '
                                     f'Очень важно следовать техническому заданию. '
-                                    f'Кстати, вот и оно: {technical_task}',
+                                    f'Кстати, вот и оно: '
+                                    f'{await db_controller.get_good_attribute_by_sku(sku=sku,
+                                                                                     attribute_name='technical_task')}',
                                reply_markup=InlineKeyboards().end_packing())
 
         '''
@@ -64,7 +62,9 @@ async def pack_products(message: Message,
         '''
 
         await state.update_data(start_packing_time=datetime.now().isoformat())
-        logger.info(f"Сотрудник {message.from_user.first_name} принялся за упаковку {good}")
+        logger.info(f"Сотрудник {message.from_user.first_name} принялся за упаковку "
+                    f"{await db_controller.get_good_attribute_by_sku(sku=sku,
+                                                                     attribute_name='name')}")
         await state.set_state(Packing.PACKING_TIME)
 
     else:
@@ -115,60 +115,58 @@ async def send_report_to_db(message: Message,
                             state: FSMContext,
                             bot: Bot,
                             db_controller: ORMController,
-                            sheets_controller: SheetsController):
-    end_time = datetime.now()
-    photo = message.photo[-1]
-    photo_id = photo.file_id
-    file = await bot.get_file(photo_id)
-    file_path = file.file_path
+                            sheets_controller: SheetsController,
+                            config,
+                            role):
+
+    file = await bot.get_file(message.photo[-1].file_id)
 
     packing_info = await state.get_data()
-
-    sku = packing_info.get('sku')
-    start_time = datetime.fromisoformat(packing_info.get('start_packing_time'))
-    good = packing_info.get('good')
-    quantity_packing = packing_info.get('quantity_packing')
-    quantity_defect = packing_info.get('quantity_defect')
-    await bot.download_file(file_path=file_path,
-                            destination=f'Упаковщик:{message.from_user.first_name}, SKU:{sku}, время:{end_time}.jpg')
-
     await state.clear()
+    end_time = datetime.now()
 
-    duration = (end_time - start_time).total_seconds()
-    performance = duration / quantity_packing
-    performance = round(performance, 2)
-    tg_id = message.from_user.id
-    role = await db_controller.get_user_role(tg_id=tg_id)
+    await bot.download_file(file_path=file.file_path,
+                            destination=f'Упаковщик:{message.from_user.first_name}, '
+                                        f'SKU:{packing_info.get('sku')}, '
+                                        f'время:{end_time}.jpg')
+
+    duration = (end_time - datetime.fromisoformat(packing_info.get('start_packing_time'))).total_seconds()
     photo_url = await upload_file_to_yandex_disk(file_path=f'Упаковщик:{message.from_user.first_name}, '
-                                                           f'SKU:{sku}, время:{end_time}.jpg',
+                                                           f'SKU:{packing_info.get('sku')}, время:{end_time}.jpg',
                                                  token=config.bot_config.get_yandex_disk_token())
 
-    logger.info(f"Сотрудник {message.from_user.first_name} закончил за упаковку {good}")
+    logger.info(f"Сотрудник {message.from_user.first_name} закончил за упаковку {packing_info.get('good')}")
 
     await bot.send_message(chat_id=message.chat.id,
-                           text=f'Отличная работа, ты упаковал {quantity_packing} {good} всего за {duration} секунд. '
-                                f'Твоя производительность составила {performance} {good} в секунду',
+                           text=f'Отличная работа, ты упаковал {packing_info.get('quantity_packing')} '
+                                f'{packing_info.get('good')} всего за {duration} секунд. '
+                                f'Твоя производительность составила '
+                                f'{round(duration/packing_info.get('quantity_packing'), 2)} '
+                                f'{packing_info.get('good')} в секунду',
                            reply_markup=InlineKeyboards().menu(role))
-    await db_controller.add_packing_info(sku=sku,
-                                         tg_id=tg_id,
-                                         start_time=start_time,
+
+    await db_controller.add_packing_info(sku=packing_info.get('sku'),
+                                         tg_id=message.from_user.id,
+                                         start_time=datetime.fromisoformat(packing_info.get('start_packing_time')),
                                          end_time=end_time,
                                          duration=duration,
-                                         quantity_packing=quantity_packing,
-                                         performance=performance,
-                                         quantity_defect=quantity_defect,
+                                         quantity_packing=packing_info.get('quantity_packing'),
+                                         performance=round(duration/packing_info.get('quantity_packing'), 2),
+                                         quantity_defect=packing_info.get('quantity_defect'),
                                          photo_url=photo_url)
     try:
-        await sheets_controller.add_packing_info_to_sheet(sku=sku,
-                                                          good=good,
-                                                          tg_id=tg_id,
+        await sheets_controller.add_packing_info_to_sheet(sku=packing_info.get('sku'),
+                                                          good=packing_info.get('good'),
+                                                          tg_id=message.from_user.id,
                                                           username=(message.from_user.first_name or None),
-                                                          start_time=start_time,
+                                                          start_time=datetime.fromisoformat
+                                                          (packing_info.get('start_packing_time')),
                                                           end_time=end_time,
                                                           duration=duration,
-                                                          quantity_packing=quantity_packing,
-                                                          performance=performance,
-                                                          defect=quantity_defect,
+                                                          quantity_packing=packing_info.get('quantity_packing'),
+                                                          performance=round(duration/packing_info.get
+                                                          ('quantity_packing'), 2),
+                                                          defect=packing_info.get('quantity_defect'),
                                                           photo_url=photo_url)
     except Exception as e:
         logger.info(f'Произошла ошибка при добавлении информации в таблицы: {e} ')

@@ -31,6 +31,10 @@ async def get_all_routers(storage: RedisStorage,
 
     start_end_router.message.middleware(ConfigMiddleware(config))
     start_end_router.message.middleware(DatabaseMiddleware(orm_controller))
+    start_end_router.message.middleware(AccessMiddleware([admins_rights,
+                                                          managers_rights,
+                                                          loaders_rights,
+                                                          packers_rights]))
 
     loader_router.message.middleware(StorageMiddleware(storage))
     loader_router.callback_query.middleware(StorageMiddleware(storage))

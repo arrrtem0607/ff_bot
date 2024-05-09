@@ -74,7 +74,10 @@ class ORMController:
                 print(f"Unexpected error: {e}")
                 return None
 
-    async def add_new_sku(self, sku: int, sku_name: str, sku_technical_task: str, sku_video_link: str):
+    async def add_new_sku(self, sku: int,
+                          sku_name: str,
+                          sku_technical_task: str,
+                          sku_video_link: str):
         new_goods = Good(
             sku=sku,
             name=sku_name,

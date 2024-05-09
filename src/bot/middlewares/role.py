@@ -6,7 +6,7 @@ from src.database.controllers.ORM import ORMController
 
 
 class AccessMiddleware(BaseMiddleware):
-    def __init__(self, allowed_roles):
+    def __init__(self, allowed_roles: list):
         super().__init__()
         self.allowed_roles = allowed_roles
         self.db_controller = ORMController()
@@ -22,7 +22,8 @@ class AccessMiddleware(BaseMiddleware):
 
         if User:
             user_role = await self.db_controller.get_user_role(self.user.id)
-            if user_role not in self.allowed_roles:
+            data['role'] = user_role
+            if not any(user_role in roles for roles in self.allowed_roles):
                 print(self.allowed_roles)
                 await self.bot.send_message(chat_id=self.user.id, text="У вас нет прав для выполнения этой команды.")
                 return

@@ -1,7 +1,7 @@
 from enum import EnumType
 from typing import Annotated
 
-from sqlalchemy import text, Enum
+from sqlalchemy import text
 from sqlalchemy.orm import mapped_column
 from datetime import datetime
 
@@ -14,14 +14,14 @@ class AnnotatedTypes(EnumType):
                                                    )]
 
 
-class RoleEnum(Enum):
+class RoleEnum(EnumType):
     admin = "admin"
     packer = "packer"
     manager = "manager"
     loader = "loader"
 
 
-class ProcessEnum(Enum):
+class ProcessEnum(EnumType):
     packing = "packing"
     loading = "loading"
     reception = "reception"
