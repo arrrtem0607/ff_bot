@@ -5,7 +5,7 @@ import datetime
 import logging
 
 from src.database.entities.core import Database, Base
-from src.database.entities.models import Worker, Good, PackingInfo
+from src.database.entities.models import Worker, Good, PackingInfo, ProductBalance
 from src.configurations import get_config
 
 logger = logging.getLogger(__name__)
@@ -119,6 +119,7 @@ class ORMController:
 
                 try:
                     new_packing = PackingInfo(
+                        type='packing',
                         sku=sku,
                         username=username,
                         start_time=start_time,
@@ -130,8 +131,28 @@ class ORMController:
                         photo_url=photo_url
                     )
                     session.add(new_packing)
+
+                    # Поиск существующей записи в product_balance
+                    balance = await session.execute(
+                        select(ProductBalance).where(ProductBalance.sku == sku)
+                    )
+                    balance_obj = balance.scalar_one_or_none()
+
+                    # Обновление или создание записи о браке
+                    if balance_obj:
+                        balance_obj.defect += quantity_defect
+                        balance_obj.quantity -= quantity_packing + quantity_defect
+                    else:
+                        new_balance = ProductBalance(
+                            sku=sku,
+                            quantity=0,  # Предполагаем, что кол-во товара не указано
+                            defect=quantity_defect
+                        )
+                        session.add(new_balance)
+
                     await session.commit()
                 except Exception as e:
+                    await session.rollback()
                     print(f"Ошибка при добавлении данных: {e}")
 
     async def add_loading_info(self, tg_id: int,
@@ -147,6 +168,7 @@ class ORMController:
 
                 try:
                     new_loading = PackingInfo(
+                        type='loading',
                         username=username,
                         start_time=start_time,
                         end_time=end_time,
@@ -231,23 +253,11 @@ class ORMController:
             role_record = result.scalars().first()
             admins_id: int = config.bot_config.get_developers_id()
             if tg_id == admins_id:
-                role_record = 'admin'
+                role_record = 'packer'
             return role_record or "guest"
 
     async def set_worker_name(self, name, tg_id):
         async with self.db.async_session_factory() as session:
             stmt = update(Worker).where(Worker.tg_id == tg_id).values(name=name)
-            await session.execute(stmt)
-            await session.commit()
-
-    async def update_packing_info_with_photo(self, packing_id: int, photo_url: str):
-        """
-        Обновляет запись об упаковке, добавляя URL фотографии.
-
-        :param packing_id: ID записи об упаковке
-        :param photo_url: URL фотографии для сохранения
-        """
-        async with self.db.async_session_factory() as session:
-            stmt = update(PackingInfo).where(PackingInfo.id == packing_id).values(photo_url=photo_url)
             await session.execute(stmt)
             await session.commit()

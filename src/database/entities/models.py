@@ -35,7 +35,7 @@ class PackingInfo(Base):
 
     id: Mapped[AnnotatedTypes.int_pk] = mapped_column(Integer, primary_key=True, autoincrement=True)
     type: Mapped[str] = mapped_column(String(256), nullable=True)
-    sku: Mapped[int] = mapped_column(Integer, ForeignKey('goods.sku'), nullable=True)
+    sku: Mapped[int] = mapped_column(BIGINT, ForeignKey('goods.sku'), nullable=True)
     username: Mapped[str] = mapped_column(String(256), ForeignKey('workers.username'), nullable=True)
     start_time: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
     end_time: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
@@ -44,3 +44,12 @@ class PackingInfo(Base):
     performance: Mapped[float] = mapped_column(Float, nullable=True)
     defect: Mapped[int] = mapped_column(Integer, nullable=True)
     photo_url: Mapped[str] = mapped_column(String(255), nullable=True)
+
+
+class ProductBalance(Base):
+    __tablename__ = "product_balance"
+
+    id: Mapped[AnnotatedTypes.int_pk] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    sku: Mapped[int] = mapped_column(BIGINT, ForeignKey('goods.sku'), nullable=True)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=True)
+    defect: Mapped[int] = mapped_column(Integer, nullable=True)
