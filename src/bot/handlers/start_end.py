@@ -1,40 +1,42 @@
 import logging
 
 from aiogram import Bot, Router, F
-from aiogram.filters import Command
+from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from aiogram.types import ReplyKeyboardRemove
+from aiogram_dialog import DialogManager, StartMode
 
 from src.bot.keyboards.inline import InlineKeyboards
 from src.bot.keyboards.reply import ReplyKeyboards
-from src.bot.utils.statesform import Authorization
+from src.bot.utils.statesform import Authorization, Registration, MainMenu
 
 router = Router()
 logger = logging.getLogger(__name__)
 
 
 @router.startup()
-async def notify_start(bot: Bot,
-                       config):
+async def notify_start(bot: Bot, config):
     await bot.send_message(config.bot_config.get_developers_id(), "Бот запущен!")
 
 
 @router.shutdown()
-async def stop_bot(bot: Bot,
-                   config):
+async def stop_bot(bot: Bot, config):
     await bot.send_message(config.bot_config.get_developers_id(), "Бот остановлен!")
 
 
-@router.message(Command("cancel"))
-async def return_to_menu(message: Message,
-                         state: FSMContext,
-                         role):
-    await state.clear()
-    await message.answer(text='Возвращаемся к началу работы',
-                         reply_markup=InlineKeyboards().menu(role=role))
+@router.message(CommandStart())
+async def command_start(message: Message, dialog_manager: DialogManager):
+    role = dialog_manager.middleware_data.get('role', 'unknown')
+    print(role)
+    if role == "pending":
+        await message.answer("Ваша заявка все еще на рассмотрении у администратора.")
+    elif role in ["packer", "admin", "manager", "loader"]:
+        await dialog_manager.start(state=MainMenu.main, mode=StartMode.RESET_STACK)
+    else:
+        await dialog_manager.start(state=Registration.get_first_name, mode=StartMode.RESET_STACK)
 
-
+'''
 @router.message(Command("start"))
 async def get_start(message: Message,
                     state: FSMContext,
@@ -61,6 +63,16 @@ async def get_start(message: Message,
         await message.answer(text=f"С возвращением, {message.from_user.first_name}! Приятной работы! 🥰",
                              reply_markup=InlineKeyboards().menu(role=role))
         logger.info(f"Приветственное сообщение отправлено пользователю {message.from_user.username}")
+'''
+
+
+@router.message(Command("cancel"))
+async def return_to_menu(message: Message,
+                         state: FSMContext,
+                         role):
+    await state.clear()
+    await message.answer(text='Возвращаемся к началу работы',
+                         reply_markup=InlineKeyboards().menu(role=role))
 
 
 @router.message(F.contact, Authorization.GET_CONTACT)

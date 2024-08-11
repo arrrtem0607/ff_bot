@@ -37,3 +37,44 @@ class UpdateWorkers(StatesGroup):
     choosing_worker = State()
     choosing_field_worker = State()
     typing_new_value_worker = State()
+
+
+class Registration(StatesGroup):
+    get_first_name = State()
+    get_second_name = State()
+    get_birth_date = State()
+    get_number = State()
+    get_payment_details = State()
+    get_bank_name = State()
+    review_data = State()
+    awaiting_approval = State()
+
+
+class AdminRegistration(StatesGroup):
+    review_application = State()
+    select_role = State()
+    enter_salary = State()
+
+
+class MainMenu(StatesGroup):
+    main = State()
+
+
+class ChangeData(StatesGroup):
+    change_first_name = State()
+    change_second_name = State()
+    change_number = State()
+    change_payment_details = State()
+    change_bank_name = State()
+
+
+class PackingProcess(StatesGroup):
+    product_selection = State()
+    pacing_time = State()
+    report_packing_info = State()
+    report_defect_info = State()
+    send_photo_report = State()
+
+
+class Statistics(StatesGroup):
+    start = State()

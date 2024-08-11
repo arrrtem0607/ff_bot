@@ -29,12 +29,10 @@ async def get_all_routers(storage: RedisStorage,
                           config: MainConfig,
                           sheets_controller: SheetsController) -> Router:
 
+    # Настраиваем остальные роутеры
     start_end_router.message.middleware(ConfigMiddleware(config))
     start_end_router.message.middleware(DatabaseMiddleware(orm_controller))
-    start_end_router.message.middleware(AccessMiddleware([admins_rights,
-                                                          managers_rights,
-                                                          loaders_rights,
-                                                          packers_rights]))
+    # start_end_router.message.middleware(AccessMiddleware([admins_rights, managers_rights, loaders_rights, packers_rights]))
 
     loader_router.message.middleware(StorageMiddleware(storage))
     loader_router.callback_query.middleware(StorageMiddleware(storage))
@@ -65,8 +63,6 @@ async def get_all_routers(storage: RedisStorage,
     admin_router.callback_query.middleware(ApschedulerMiddleware(scheduler))
     admin_router.message.middleware(AccessMiddleware(admins_rights))
     admin_router.callback_query.middleware(AccessMiddleware(admins_rights))
-    # admin_router.message.filter(ChatAdminFilter(admins_id))
-    # admin_router.callback_query.filter(ChatAdminFilter(admins_id))
     admin_router.message.middleware(SheetsMiddleware(sheets_controller))
     admin_router.callback_query.middleware(SheetsMiddleware(sheets_controller))
     admin_router.message.middleware(ConfigMiddleware(config))
@@ -75,7 +71,12 @@ async def get_all_routers(storage: RedisStorage,
     router: Router = Router()
     router.message.filter(ChatTypeFilter("private"))
 
+    # Включение всех маршрутизаторов
     router.include_routers(
-        start_end_router, packer_router, admin_router, loader_router
+        start_end_router,
+        packer_router,
+        admin_router,
+        loader_router,
     )
+
     return router
